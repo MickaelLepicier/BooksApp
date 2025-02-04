@@ -38,12 +38,12 @@ function save(book) {
   }
 }
 
-function getEmptyBook(title = 'xxx', listPrice = '000') {
-  return { title, listPrice }
+function getEmptyBook(id = '', title = 'xxx', listPrice = '000') {
+  return { id, title, listPrice }
 }
 
 function getDefaultFilter() {
-  return { vendor: '', speed: '' }
+  return { id:'', title:'', listPrice:'' }
 }
 
 function _createBooks() {

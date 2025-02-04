@@ -33,11 +33,20 @@ export function BookIndex() {
       setBooks(books)
     })
   }
-  console.log('books: ', books)
-
+  //   console.log('books: ', books)
+  if (!books) return 'Loading...'
   return (
     <section>
       <h1>Books</h1>
+      {books.maps((book) => {
+        console.log('books: ', books)
+        return (
+          <section>
+            <h2>{book.title}</h2>
+            <p>{book.listPrice}</p>
+          </section>
+        )
+      })}
     </section>
   )
 }
