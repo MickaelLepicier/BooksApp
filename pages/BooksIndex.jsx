@@ -1,6 +1,7 @@
 //
 //
 
+import { BooksList } from '../cmps/BooksList.jsx'
 import { booksService } from '../services/booksService.js'
 
 const { useState, useEffect, useRef } = React
@@ -22,10 +23,11 @@ export function BooksIndex() {
   //     }
   //   }
 
-  const [books, setBooks] = useState([])
+  const [books, setBooks] = useState(null)
+  console.log(books)
 
   useEffect(() => {
-    // loadBooks()
+    loadBooks()
   }, [])
 
   function loadBooks() {
@@ -37,16 +39,7 @@ export function BooksIndex() {
   if (!books) return 'Loading...'
   return (
     <section>
-      <h1>Books</h1>
-      {books.map((book) => {
-        console.log('book: ', book)
-        return (
-          <section>
-            <h2>{book.title}</h2>
-            <p>{book.listPrice}</p>
-          </section>
-        )
-      })}
+      <BooksList books={books} />
     </section>
   )
 }

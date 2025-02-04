@@ -1,11 +1,11 @@
+export function BookPreview({ book }) {
+  const { id, title, listPrice } = book
+  //   console.log('book: ', book)
 
-export function BookPreview() {
-    const book = { fullname: 'Puki Reactof', score: 87 }
-    
-    return (
-        <section className="book-preview">
-            <h2>{book.fullname}</h2>
-            <h3>Score: {book.score}</h3>
-        </section>
-    )
+  return (
+    <section className="book-container" >
+      <h2>{title}</h2>
+      <p>{listPrice}</p>
+    </section>
+  )
 }
