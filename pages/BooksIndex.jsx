@@ -5,7 +5,7 @@ import { booksService } from '../services/booksService.js'
 
 const { useState, useEffect, useRef } = React
 
-export function BookIndex() {
+export function BooksIndex() {
   // TODOs:
   // get data from storage
   // add it on the state
@@ -22,10 +22,10 @@ export function BookIndex() {
   //     }
   //   }
 
-  const [books, setBooks] = useState(null)
+  const [books, setBooks] = useState([])
 
   useEffect(() => {
-    loadBooks()
+    // loadBooks()
   }, [])
 
   function loadBooks() {
@@ -33,13 +33,13 @@ export function BookIndex() {
       setBooks(books)
     })
   }
-  //   console.log('books: ', books)
+  // console.log('books: ', books)
   if (!books) return 'Loading...'
   return (
     <section>
       <h1>Books</h1>
-      {books.maps((book) => {
-        console.log('books: ', books)
+      {books.map((book) => {
+        console.log('book: ', book)
         return (
           <section>
             <h2>{book.title}</h2>
