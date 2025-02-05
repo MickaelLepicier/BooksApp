@@ -14,8 +14,16 @@ export const bookService = {
   getDefaultFilter
 }
 
-function query() {
+function query(filter) {
   return storageService.query(BOOK_KEY).then((books) => {
+    console.log('filter: ', filter)
+
+    // {title: '', listPrice: ''}
+
+    // TODO look at the video when she is speaking about the car service or the filter
+    if (filter.title) return books.map((book) => book.title === filter.title)
+
+    // console.log('books: ', books)
     //if()
 
     return books
@@ -43,7 +51,7 @@ function getEmptyBook(id = '', title = 'xxx', listPrice = '000') {
 }
 
 function getDefaultFilter() {
-  return { id:'', title:'', listPrice:'' }
+  return { title: '', listPrice: '' }
 }
 
 function _createBooks() {

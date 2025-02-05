@@ -7,8 +7,6 @@ import { bookService } from '../services/book.service.js'
 
 const { useState, useEffect, useRef } = React
 
-
-
 export function BookIndex() {
   //   const obj = {
   //     id: 'OXeMG8wNskc',
@@ -33,23 +31,19 @@ export function BookIndex() {
   }, [filterBy])
 
   function loadBooks() {
-    bookService.query(filterBy).then((books) => {
-      setBooks(books)
-    })
+    bookService.query(filterBy)
+      .then((books) => {
+        setBooks(books)
+      })
+      .catch((err) => console.error('Could not get the Books Data: ', err))
   }
 
   // console.log('books: ', books)
   if (!books) return 'Loading...'
 
-// TODOs:
-// create filter tab
-// put filter in the query in the bookService
-
-
-
   return (
     <section>
-      <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy}/>
+      <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy} />
       <BookList books={books} />
     </section>
   )
