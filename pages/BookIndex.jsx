@@ -2,6 +2,7 @@
 //
 
 import { BookList } from '../cmps/BookList.jsx'
+import { BooksFilter } from '../cmps/BooksFilter.jsx'
 import { bookService } from '../services/book.service.js'
 
 const { useState, useEffect, useRef } = React
@@ -48,7 +49,7 @@ export function BookIndex() {
 
   return (
     <section>
-      <FilterByTab setFilterBy={setFilterBy}/>
+      <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy}/>
       <BookList books={books} />
     </section>
   )
