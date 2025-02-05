@@ -5,7 +5,7 @@ const BOOK_KEY = 'bookDB'
 
 _createBooks()
 
-export const booksService = {
+export const bookService = {
   query,
   get,
   remove,
@@ -49,14 +49,15 @@ function getDefaultFilter() {
 function _createBooks() {
   let books = loadFromStorage(BOOK_KEY)
   if (!books || !books.length) {
-    books = [_createBook(), _createBook(), _createBook()]
+    books = [_createBook(), _createBook('yyy'), _createBook('zzz')]
   }
   saveToStorage(BOOK_KEY, books)
 }
 
-function _createBook() {
+function _createBook(bookTitle = 'xxx') {
   const book = getEmptyBook()
   book.id = makeId()
+  book.title = bookTitle
   return book
 }
 

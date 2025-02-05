@@ -1,6 +1,6 @@
 import { HomePage } from './pages/HomePage.jsx'
 import { AboutUs } from './pages/AboutUs.jsx'
-import { BooksIndex } from './pages/BooksIndex.jsx'
+import { BookIndex } from './pages/BookIndex.jsx'
 import { AppHeader } from './cmps/AppHeader.jsx'
 
 const { useState } = React
@@ -20,7 +20,7 @@ export function App() {
       <main className="main-layout">
         {page === 'home' && <HomePage />}
         {page === 'about' && <AboutUs />}
-       {page === 'books' &&  <BooksIndex />}
+       {page === 'books' &&  <BookIndex />}
       </main>
     </section>
   )

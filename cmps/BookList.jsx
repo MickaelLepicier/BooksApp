@@ -1,6 +1,6 @@
 import { BookPreview } from './BookPreview.jsx'
 
-export function BooksList({ books }) {
+export function BookList({ books }) {
   // console.log('books: ',books);
   return (
     <section className="books-container">
