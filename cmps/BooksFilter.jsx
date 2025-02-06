@@ -1,6 +1,5 @@
 //
-// שואל לגבי שכשאני שומר אז שזה יסדר בצורה שהשורה תהיה ארוכה יותר
-//
+
 const { useState, useEffect } = React
 
 export function BooksFilter({ filterBy, setFilterBy }) {
@@ -16,9 +15,9 @@ export function BooksFilter({ filterBy, setFilterBy }) {
 
     if (type === 'number') value = +value
 
-    setBooksFilter((prevBooksFilter) => ({ ...booksFilter, [field]: value }))
+    setBooksFilter((prevBooksFilter) => ({ ...prevBooksFilter, [field]: value }))
 
-    // TODO understand how filter is working then keep going
+    
   }
 
   return (
@@ -26,8 +25,8 @@ export function BooksFilter({ filterBy, setFilterBy }) {
       <form onSubmit={setFilterBy}>
         <label htmlFor="title">Title:</label>{' '}
         <input type="text" name="title" onChange={updateFilter} />
-        <label htmlFor="price">Price:</label>
-        <input type="number" name="price" onChange={updateFilter} />
+        <label htmlFor="listPrice">Price:</label>
+        <input type="number" name="listPrice" onChange={updateFilter} />
         <button>Submit</button>
       </form>
     </section>

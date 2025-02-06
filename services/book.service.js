@@ -14,19 +14,37 @@ export const bookService = {
   getDefaultFilter
 }
 
-function query(filter) {
+function query(filterBy) {
   return storageService.query(BOOK_KEY).then((books) => {
-    console.log('filter: ', filter)
+    let filteredBooks = [...books]
+    // console.log('filter: ', filter)
+    if (filterBy.title) {
+      const regExp = new RegExp(filterBy.title, 'i')
+      filteredBooks = filteredBooks.filter(book => regExp.test(book.title))
+  }
+  if (filterBy.listPrice) {
+    filteredBooks = filteredBooks.filter(book => book.speed >= filterBy.listPrice)
+  }
 
-    // {title: '', listPrice: ''}
+    /*
+            Another way: (not a very good one)
 
-    // TODO look at the video when she is speaking about the car service or the filter
-    if (filter.title) return books.map((book) => book.title === filter.title)
+    if (filter.title)
+      books = books.filter((book) => {
+        const filterTitle = filter.title.toLowerCase()
+        const bookTitle = book.title.toLowerCase()
+        return bookTitle.includes(filterTitle)
+      })
 
+    if (filter.listPrice) {
+      books = books.filter((book) => {
+        return +book.listPrice > filter.listPrice
+      })
+    }
+
+      */
     // console.log('books: ', books)
-    //if()
-
-    return books
+    return filteredBooks
   })
 }
 
