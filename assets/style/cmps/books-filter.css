@@ -1,0 +1,25 @@
+.filter-form {
+  justify-items: center;
+  margin: 1em 0;
+
+  border: 1px solid black;
+  background-color: blanchedalmond;
+}
+
+.filter-form h1 {
+  font-size: 1.5em;
+}
+
+.filter-form form {
+  display: flex;
+  gap: 1em;
+  justify-content: space-around;
+
+  min-width: 100%;
+  margin: 1em;
+}
+
+.filter-form form input {
+  min-width: 35%;
+  height: 2.5em;
+}
