@@ -6,20 +6,16 @@ export function BookPreview({ book }) {
   // const imgNames = getImgNames()
   // console.log('imgNames: ', imgNames)
 
+  // TODO add on the img "onSale" if isOnSale === true
+
   return (
-    <section className="book-container">
+    <React.Fragment>
       <img src={imgSrc} alt="book-image" />
       <h2>{title}</h2>
       <p>{listPrice.amount}$</p>
-
-      <section className="btns">
-        <button >Details</button>
-        <button>Delete</button>
-      </section>
-    </section>
+    </React.Fragment>
   )
 }
-
 
 function getImgNames() {
   let res = []

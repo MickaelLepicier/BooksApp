@@ -1,0 +1,38 @@
+.book-details-container {
+  display: flex;
+  gap: 20px;
+  justify-self: center;
+
+  max-width: 80vw;
+  margin-block: 1em 0;
+  padding: 1em;
+  font-size: 1.2em;
+
+  border-radius: 10px;
+  background-color: aquamarine;
+}
+
+.book-details-container img {
+  border-radius: 10px;
+}
+
+.book-details-container span {
+  font-weight: bold;
+}
+
+.book-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.btns-details {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: auto;
+}
+
+.btns-details button {
+  min-width: 40%;
+  font-size: 0.9em;
+}

@@ -11,7 +11,11 @@
 }
 
 .book-container {
-  max-width: 250px;
+  /* display: flex;
+  flex-direction: column;
+  flex-grow: 1; */
+
+  max-width: 400px;
   text-align: center;
   padding: 1em;
 
@@ -26,3 +30,7 @@
 
   border-radius: 10px;
 }
+
+/* .book-container button {
+  margin-top: auto;
+} */

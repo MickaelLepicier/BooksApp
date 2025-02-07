@@ -1,6 +1,7 @@
 //
 //
 
+import { BookDetails } from '../cmps/BookDetails.jsx'
 import { BookList } from '../cmps/BookList.jsx'
 import { BooksFilter } from '../cmps/BooksFilter.jsx'
 import { bookService } from '../services/book.service.js'
@@ -8,30 +9,19 @@ import { bookService } from '../services/book.service.js'
 const { useState, useEffect, useRef } = React
 
 export function BookIndex() {
-  //   const obj = {
-  //     id: 'OXeMG8wNskc',
-  //     title: 'metus hendrerit',
-  //     description: 'placerat nisi sodales suscipit tellus',
-  //     thumbnail: 'http://ca.org/books-photos/20.jpg',
-  //     listPrice: {
-  //       amount: 109,
-  //       currencyCode: 'EUR',
-  //       isOnSale: false
-  //     }
-  //   }
-
   const [books, setBooks] = useState(null)
-  // console.log(books)
 
   const [filterBy, setFilterBy] = useState(bookService.getDefaultFilter())
-  // console.log('filterBy: ', filterBy)
+
+  const [selectedBookId, setSelectedBookId] = useState(null)
 
   useEffect(() => {
     loadBooks()
   }, [filterBy])
 
   function loadBooks() {
-    bookService.query(filterBy)
+    bookService
+      .query(filterBy)
       .then((books) => {
         setBooks(books)
       })
@@ -41,11 +31,18 @@ export function BookIndex() {
   // console.log('books: ', books)
   if (!books) return 'Loading...'
 
+  // <React.Fragment>
   return (
     <section>
-      <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy} />
-      <button>Add Book</button>
-      <BookList books={books} />
+      {selectedBookId && <BookDetails bookId={selectedBookId} setSelectedBookId={setSelectedBookId} />}
+
+      {!selectedBookId && (
+        <section>
+          <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy} />
+          <button>Add Book</button>
+          <BookList books={books} setSelectedBookId={setSelectedBookId} />
+        </section>
+      )}
     </section>
   )
 }
