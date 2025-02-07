@@ -1,5 +1,6 @@
 import { makeId } from './util.service.js'
 import { loadFromStorage, saveToStorage } from './storage.service.js'
+import { booksData } from '../assets/data/books.js'
 
 const BOOK_KEY = 'bookDB'
 
@@ -20,29 +21,12 @@ function query(filterBy) {
     // console.log('filter: ', filter)
     if (filterBy.title) {
       const regExp = new RegExp(filterBy.title, 'i')
-      filteredBooks = filteredBooks.filter(book => regExp.test(book.title))
-  }
-  if (filterBy.listPrice) {
-    filteredBooks = filteredBooks.filter(book => book.speed >= filterBy.listPrice)
-  }
-
-    /*
-            Another way: (not a very good one)
-
-    if (filter.title)
-      books = books.filter((book) => {
-        const filterTitle = filter.title.toLowerCase()
-        const bookTitle = book.title.toLowerCase()
-        return bookTitle.includes(filterTitle)
-      })
-
-    if (filter.listPrice) {
-      books = books.filter((book) => {
-        return +book.listPrice > filter.listPrice
-      })
+      filteredBooks = filteredBooks.filter((book) => regExp.test(book.title))
+    }
+    if (filterBy.listPrice) {
+      filteredBooks = filteredBooks.filter((book) => book.listPrice.amount >= filterBy.listPrice)
     }
 
-      */
     // console.log('books: ', books)
     return filteredBooks
   })
@@ -75,19 +59,39 @@ function getDefaultFilter() {
 function _createBooks() {
   let books = loadFromStorage(BOOK_KEY)
   if (!books || !books.length) {
-    books = [_createBook(), _createBook('yyy'), _createBook('zzz')]
+    books = booksData.map((book, idx) =>_createBook(book,idx))
   }
   saveToStorage(BOOK_KEY, books)
 }
+
+function _createBook(book,idx){
+  book.imgSrc = `../assets/img/${idx + 1}.jpg`
+  return book
+}
+
+
+
+/*
 
 function _createBook(bookTitle = 'xxx') {
   const book = getEmptyBook()
   book.id = makeId()
   book.title = bookTitle
+
+  let book = {
+    id: 'OXeMG8wNskc',
+    title: 'metus hendrerit',
+    description: 'placerat nisi sodales suscipit tellus',
+    thumbnail: 'http://ca.org/books-photos/20.jpg',
+    listPrice: {
+      amount: 109,
+      currencyCode: 'EUR',
+      isOnSale: false
+    }
+  }
+
   return book
 }
-
-/*
 
 {
 "id": "OXeMG8wNskc",
@@ -100,5 +104,7 @@ function _createBook(bookTitle = 'xxx') {
 "isOnSale": false
 }
 }
+
+
 
 */

@@ -1,0 +1,28 @@
+.books-container {
+  /* border: 20px solid black; */
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  justify-content: center;
+
+  padding: 1em;
+  background-color: antiquewhite;
+}
+
+.book-container {
+  max-width: 250px;
+  text-align: center;
+  padding: 1em;
+
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: #8994da;
+}
+
+.book-container img {
+  /* width: ; */
+  /* max-width: 60%; */
+
+  border-radius: 10px;
+}

@@ -44,6 +44,7 @@ export function BookIndex() {
   return (
     <section>
       <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy} />
+      <button>Add Book</button>
       <BookList books={books} />
     </section>
   )
