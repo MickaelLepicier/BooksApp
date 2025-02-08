@@ -5,7 +5,6 @@ const { useState, useEffect, useRef } = React
 
 export function BookDetails({ bookId, setSelectedBookId }) {
   const [book, setBook] = useState(null)
-// const [isTextLong, setIsTextLong] = useState()
 
   const imgRef = useRef()
   const ribbonRef = useRef()
@@ -58,7 +57,7 @@ export function BookDetails({ bookId, setSelectedBookId }) {
     return diff >= 10? 'Vintage' : 'New'
   }
 
-  
+  // TODO later on create more comps for shorter code
 
   return (
     <section className="book-details-container">

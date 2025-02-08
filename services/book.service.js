@@ -9,6 +9,8 @@ _createBooks()
 export const bookService = {
   query,
   get,
+  post,
+  put,
   remove,
   save,
   getEmptyBook,
@@ -23,10 +25,18 @@ function query(filterBy) {
       const regExp = new RegExp(filterBy.title, 'i')
       filteredBooks = filteredBooks.filter((book) => regExp.test(book.title))
     }
+
     if (filterBy.listPrice) {
       filteredBooks = filteredBooks.filter((book) => book.listPrice.amount >= filterBy.listPrice)
     }
 
+    if (filterBy.publishedDate) {
+      filteredBooks = filteredBooks.filter((book) => book.publishedDate >= filterBy.publishedDate)
+    }
+
+    if (filterBy.pageCount) {
+      filteredBooks = filteredBooks.filter((book) => book.pageCount >= filterBy.pageCount)
+    }
     // console.log('books: ', books)
     return filteredBooks
   })
@@ -34,6 +44,14 @@ function query(filterBy) {
 
 function get(bookId) {
   return storageService.get(BOOK_KEY, bookId)
+}
+
+function post(newEntity) {
+  return storageService.post(BOOK_KEY, newEntity)
+}
+
+function put(updatedEntity) {
+  return storageService.put(BOOK_KEY, updatedEntity)
 }
 
 function remove(bookId) {
@@ -48,28 +66,26 @@ function save(book) {
   }
 }
 
-function getEmptyBook(id = '', title = 'xxx', listPrice = '000') {
-  return { id, title, listPrice }
+function getEmptyBook(id = '', title = 'test', listPrice = 100, publishedDate = 2000, pageCount = 100) {
+  return { id, title, listPrice, publishedDate, pageCount }
 }
 
 function getDefaultFilter() {
-  return { title: '', listPrice: '' }
+  return { title: '', listPrice: '', publishedDate: '', pageCount: '' }
 }
 
 function _createBooks() {
   let books = loadFromStorage(BOOK_KEY)
   if (!books || !books.length) {
-    books = booksData.map((book, idx) =>_createBook(book,idx))
+    books = booksData.map((book, idx) => _createBook(book, idx))
   }
   saveToStorage(BOOK_KEY, books)
 }
 
-function _createBook(book,idx){
+function _createBook(book, idx) {
   book.imgSrc = `../assets/img/${idx + 1}.jpg`
   return book
 }
-
-
 
 /*
 

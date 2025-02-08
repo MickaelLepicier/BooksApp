@@ -1,9 +1,8 @@
+
 import { BookPreview } from './BookPreview.jsx'
 
-export function BookList({ books, setSelectedBookId }) {
-  function onDelete(bookId) {
-    //
-  }
+export function BookList({ books, setSelectedBookId, onDelete }) {
+ 
 
   // console.log('books: ',books);
   return (
