@@ -11,15 +11,16 @@
 }
 
 .filter-form form {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1em;
-  justify-content: space-around;
 
-  min-width: 100%;
+  min-width: 80%;
   margin: 1em;
 }
 
 .filter-form form input {
   min-width: 35%;
   height: 2.5em;
+  padding: 1em;
 }

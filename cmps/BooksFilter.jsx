@@ -24,11 +24,35 @@ export function BooksFilter({ filterBy, setFilterBy }) {
     <section className="filter-form">
       <h1>Filter Books</h1>
       <form onSubmit={setFilterBy}>
-        {/* <label htmlFor="title">Title:</label>{' '} */}
-        <input type="text" name="title" onChange={updateFilter} placeholder="Search by title" />
-        {/* <label htmlFor="listPrice">Price:</label> */}
-        <input type="number" name="listPrice" onChange={updateFilter} placeholder="Search by price" />
-        {/* <button>Submit</button> */}
+        <input
+          type="text"
+          name="title"
+          value={booksFilter.title || ''}
+          onChange={updateFilter}
+          placeholder="Search by title"
+        />
+        <input
+          type="number"
+          name="listPrice"
+          value={booksFilter.listPrice || ''}
+          onChange={updateFilter}
+          placeholder="Search by price"
+        />
+
+        <input
+          type="number"
+          name="publishedDate"
+          value={booksFilter.publishedDate || ''}
+          onChange={updateFilter}
+          placeholder="Search by published year"
+        />
+        <input
+          type="number"
+          name="pageCount"
+          value={booksFilter.pageCount || ''}
+          onChange={updateFilter}
+          placeholder="Search by number of pages"
+        />
       </form>
     </section>
   )
