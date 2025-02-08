@@ -1,9 +1,11 @@
 import { bookService } from '../services/book.service.js'
+import { LongText } from '../cmps/LongText.jsx'
 
 const { useState, useEffect, useRef } = React
 
 export function BookDetails({ bookId, setSelectedBookId }) {
   const [book, setBook] = useState(null)
+// const [isTextLong, setIsTextLong] = useState()
 
   const imgRef = useRef()
   const ribbonRef = useRef()
@@ -68,14 +70,20 @@ export function BookDetails({ bookId, setSelectedBookId }) {
 
       <section className="book-info">
         <h2><span>Title:</span> {title}</h2>
-        <p><span>Published Date: </span> {publishedDate} ({publishedDateMsg})</p>
+        <p>
+            <span>Published Date: </span>
+            {publishedDate} ({publishedDateMsg})
+        </p>
         <p><span>Language: </span> {language}</p>
         <p><span>Pages:</span> {pageCount} ({pageCountMsg})</p>
         <p>
             <span>Price: </span>
                 <span ref={priceRef}>{amount}$</span>
         </p>
-        <p><span>Description:</span> {description}</p>
+        <p>
+            <span>Description:</span>
+            <LongText description={description} />
+        </p>
 
         <section className="btns-actions">
           <button onClick={() => setSelectedBookId(null)}>Edit</button>
