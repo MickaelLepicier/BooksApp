@@ -1,6 +1,7 @@
 const { useState } = React
 
 export function LongText({ description }) {
+  if (!description) return ''
   if (description.length <= 100) return description
 
   const [isShown, setIsShown] = useState(false)

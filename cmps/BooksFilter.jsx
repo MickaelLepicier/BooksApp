@@ -5,7 +5,6 @@ export function BooksFilter({ filterBy, setFilterBy }) {
 
   useEffect(() => {
     let timeOutId = setTimeout(() => {
-      // console.log('run function ')
       setFilterBy(booksFilter)
     }, 500)
 
@@ -33,8 +32,8 @@ export function BooksFilter({ filterBy, setFilterBy }) {
         />
         <input
           type="number"
-          name="listPrice"
-          value={booksFilter.listPrice || ''}
+          name="price"
+          value={booksFilter.price || ''}
           onChange={updateFilter}
           placeholder="Search by price"
         />

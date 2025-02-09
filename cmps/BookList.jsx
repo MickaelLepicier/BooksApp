@@ -4,12 +4,9 @@ import { BookPreview } from './BookPreview.jsx'
 export function BookList({ books, setSelectedBookId, onDelete }) {
  
 
-  // console.log('books: ',books);
   return (
     <section className="books-container">
-      {/* <h1>Books</h1> */}
       {books.map((book) => {
-        // console.log('book: ',book);
 
         return (
           <section key={book.id} className="book-container">

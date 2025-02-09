@@ -1,18 +1,17 @@
 export function BookPreview({ book }) {
-  const { id, title, imgSrc, listPrice } = book
+  const { id, title, price, imgSrc, } = book
 
   // const imgSrc = `../assets/img/${imgName}.jpg`
 
   // const imgNames = getImgNames()
   // console.log('imgNames: ', imgNames)
 
-  // TODO add on the img "onSale" if isOnSale === true
 
   return (
     <React.Fragment>
       <img src={imgSrc} alt="book-image" />
       <h2>{title}</h2>
-      <p>{listPrice.amount}$</p>
+      <p>{price}$</p>
     </React.Fragment>
   )
 }

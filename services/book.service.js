@@ -26,8 +26,8 @@ function query(filterBy) {
       filteredBooks = filteredBooks.filter((book) => regExp.test(book.title))
     }
 
-    if (filterBy.listPrice) {
-      filteredBooks = filteredBooks.filter((book) => book.listPrice.amount >= filterBy.listPrice)
+    if (filterBy.price) {
+      filteredBooks = filteredBooks.filter((book) => book.price >= filterBy.price)
     }
 
     if (filterBy.publishedDate) {
@@ -66,7 +66,7 @@ function save(book) {
   }
 }
 
-function getEmptyBook(id = '', title = 'test', listPrice = 100, publishedDate = 2000, pageCount = 100) {
+function getEmptyBook(id = '', title = '', listPrice = '', publishedDate = '', pageCount = '') {
   return { id, title, listPrice, publishedDate, pageCount }
 }
 
@@ -83,8 +83,20 @@ function _createBooks() {
 }
 
 function _createBook(book, idx) {
-  book.imgSrc = `../assets/img/${idx + 1}.jpg`
-  return book
+let newBook = {
+  id: book.id,
+  title: book.title,
+  price: book.listPrice.amount,
+  language:book.language,
+  description:book.description,
+  publishedDate: book.publishedDate,
+  pageCount: book.pageCount,
+  isOnSale: book.listPrice.isOnSale,
+  imgSrc: `../assets/img/${idx + 1}.jpg`
+}
+// console.log('newBook: ',newBook);
+
+return newBook
 }
 
 /*

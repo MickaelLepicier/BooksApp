@@ -1,9 +1,8 @@
-import { BookDetails } from '../cmps/BookDetails.jsx'
+import { BookDetails } from './BookDetails.jsx'
 import { BookList } from '../cmps/BookList.jsx'
 import { BooksFilter } from '../cmps/BooksFilter.jsx'
-import { EditBook } from '../cmps/EditBook.jsx'
+import { BookEdit } from './BookEdit.jsx'
 import { bookService } from '../services/book.service.js'
-import { makeId } from '../services/util.service.js'
 
 const { useState, useEffect, useRef } = React
 
@@ -29,20 +28,22 @@ export function BookIndex() {
       .catch((err) => console.error('Could not get the Books Data: ', err))
   }
 
-  function onAdd(ev, title, listPrice, publishedDate, pageCount) {
-    ev.preventDefault()
+  function onAdd(newBook) {
+    newBook.imgSrc = '../assets/img/1.jpg'
 
-    let newBook = bookService.getEmptyBook()
-    newBook.id = makeId()
-    console.log('newBook: ', newBook)
-    console.log('title: ',title);
-    // console.log('title,listPrice,publishedDate,pageCount: ', title, listPrice, publishedDate, pageCount)
-  
+    bookService
+      .post(newBook)
+      .then(() => {
+        console.log('Book is saved')
+      })
+      .catch((err) => console.log(`The book did not Added: ${err}`))
   }
 
-  function onUpdate(ev,bookId) {
-    ev.preventDefault()
-    // const updatedBook
+  function onUpdate(book) {
+    bookService
+      .put(book)
+      .then(() => console.log('Book is updated'))
+      .catch((err) => console.log(`The book did not Updated: ${err}`))
   }
 
   function onDelete(bookId) {
@@ -58,24 +59,42 @@ export function BookIndex() {
   if (!books) return 'Loading...'
   // console.log('books: ', books)
 
-  // <AddBook/>
-  // <EditBook/>
+  // console.log('isEdit: ',isEdit);
+  // console.log('selectedBookId: ',selectedBookId);
   return (
-    <section>
-
+    <section className='book-index-container'>
       {/* Update a Book */}
-      {isEdit && selectedBookId && <EditBook bookId={selectedBookId} onUpdate={onUpdate} />}
+      {isEdit && selectedBookId && (
+        <BookEdit
+          bookId={selectedBookId}
+          onUpdate={onUpdate}
+          setIsEdit={setIsEdit}
+          setSelectedBookId={setSelectedBookId}
+        />
+      )}
 
-      {/* Add a Book  */}
-      {isEdit && <EditBook  onAdd={onAdd} />}
+      {/* Add a Book */}
+      {isEdit && !selectedBookId && (
+        <BookEdit onAdd={onAdd} setIsEdit={setIsEdit} />
+      )}
 
-      {!isEdit && selectedBookId && <BookDetails bookId={selectedBookId} setSelectedBookId={setSelectedBookId} />}
+      {!isEdit && selectedBookId && (
+        <BookDetails
+          bookId={selectedBookId}
+          setSelectedBookId={setSelectedBookId}
+          setIsEdit={setIsEdit}
+        />
+      )}
 
       {!isEdit && !selectedBookId && (
         <section>
           <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy} />
-          <button onClick={()=>setIsEdit(true)}>Add Book</button>
-          <BookList books={books} setSelectedBookId={setSelectedBookId} onDelete={onDelete} />
+          <button className='btn-add' onClick={() => setIsEdit(true)}>Add Book</button>
+          <BookList
+            books={books}
+            setSelectedBookId={setSelectedBookId}
+            onDelete={onDelete}
+          />
         </section>
       )}
     </section>
