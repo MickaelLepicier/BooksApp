@@ -1,5 +1,4 @@
 .book-edit-container {
-  /* justify-items: center; */
   max-width: 500px;
   margin: 40px auto;
   padding: 20px;
@@ -17,51 +16,43 @@
 .book-edit-container form {
   display: grid;
   gap: 10px;
+  font-size: 1.3em;
 }
-/* TODO understand and change it */
+
 .form-group {
   display: grid;
-  grid-template-columns: 1fr 2fr; /* Labels take 1 part, inputs take 2 parts */
+  grid-template-columns: 1fr 2fr;
   align-items: center;
-  gap: 10px; /* Space between label and input */
+  gap: 10px;
 }
 
 label {
   font-weight: bold;
-  text-align: right; /* Align text to the right for better spacing */
+  text-align: right;
 }
 
-/* Input styling */
 input {
-  width: 100%;
+  width: 80%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
 }
 
-/* Checkbox alignment */
-.checkbox-container {
+.checkbox {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
-/* Buttons Layout */
-.buttons {
+.checkbox label {
   display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
 }
 
-button {
+form button {
   padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
   font-size: 16px;
-  flex: 1;
-  margin: 0 5px;
 }
 
 button[type='submit'] {

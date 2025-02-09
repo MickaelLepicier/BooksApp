@@ -2,13 +2,7 @@ import { bookService } from '../services/book.service.js'
 
 const { useState, useEffect } = React
 
-export function BookEdit({
-  bookId,
-  onAdd,
-  onUpdate,
-  setIsEdit,
-  setSelectedBookId
-}) {
+export function BookEdit({ bookId, onAdd, onUpdate, setIsEdit, setSelectedBookId }) {
   const [book, setBook] = useState(null)
 
   const currFunc = bookId ? onUpdate : onAdd
@@ -37,11 +31,9 @@ export function BookEdit({
   }
 
   function updateBook(ev) {
-    let { type, name: field, value, checked } = ev.target
+    let { type, name: field, value } = ev.target
 
     if (type === 'number') value = +value
-    if (type === 'checkbox') value = checked
-
     setBook((prevBook) => ({ ...prevBook, [field]: value }))
   }
 
@@ -52,7 +44,6 @@ export function BookEdit({
       <h1>{headerMsg} a Book!</h1>
 
       <form onSubmit={onSubmit}>
-        {/* <section className="inputs-container"> */}
         <div className="form-group">
           <label htmlFor="title">Title:</label>
           <input
@@ -60,7 +51,7 @@ export function BookEdit({
             name="title"
             value={book.title || ''}
             onChange={updateBook}
-            placeholder="Wright a title"
+            placeholder="Wright the title"
             required
           />
         </div>
@@ -98,19 +89,31 @@ export function BookEdit({
           />
         </div>
 
-        {/* </section> */}
         <div className="form-group checkbox">
           <label htmlFor="isOnSale">On sale:</label>
-          <input
-            type="checkbox"
-            name="isOnSale"
-            value={book.isOnSale || false}
-            onChange={updateBook}
-            placeholder="Wright the number of pages"
-          />
-        </div>
 
-        <button>Submit</button>
+          <label htmlFor="isOnSale">
+            Yes
+            <input
+              type="radio"
+              name="isOnSale"
+              value={true}
+              onChange={updateBook}
+              placeholder="Wright the number of pages"
+            />
+          </label>
+          <label htmlFor="isOnSale">
+            No
+            <input
+              type="radio"
+              name="isOnSale"
+              value={false}
+              onChange={updateBook}
+              placeholder="Wright the number of pages"
+            />
+          </label>
+        </div>
+        <button type="submit">Submit</button>
         <button type="button" onClick={onClose}>
           Close
         </button>
