@@ -46,6 +46,18 @@ export function getRandomIntInclusive(min, max) {
 //     return (data) ? JSON.parse(data) : undefined
 // }
 
+export function getCurrencySymbol(currencyCode) {
+    let symbol = '$'
+
+    if (currencyCode === 'EUR') {
+      symbol = '€'
+    } else if (currencyCode === 'ILS') {
+      symbol = '₪'
+    }
+
+    return symbol
+  }
+
 export function getDayName(date, locale) {
     date = new Date(date)
     return date.toLocaleDateString(locale, { weekday: 'long' })

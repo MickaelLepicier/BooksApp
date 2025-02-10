@@ -4,15 +4,12 @@ import { BooksFilter } from '../cmps/BooksFilter.jsx'
 import { BookEdit } from './BookEdit.jsx'
 import { bookService } from '../services/book.service.js'
 
-const { useState, useEffect, useRef } = React
+const { useState, useEffect } = React
 
 export function BookIndex() {
   const [books, setBooks] = useState(null)
-
   const [filterBy, setFilterBy] = useState(bookService.getDefaultFilter())
-
   const [selectedBookId, setSelectedBookId] = useState(null)
-
   const [isEdit, setIsEdit] = useState(false)
 
   useEffect(() => {
@@ -30,6 +27,7 @@ export function BookIndex() {
 
   function onAdd(newBook) {
     newBook.imgSrc = '../assets/img/1.jpg'
+    // newBook.thumbnail = '../assets/img/1.jpg'
 
     bookService
       .post(newBook)
@@ -56,46 +54,54 @@ export function BookIndex() {
       .catch((err) => console.log('Book has not been Deleted:', err))
   }
 
-  if (!books) return 'Loading...'
-  // console.log('books: ', books)
+  if (!books) return <div>Loading...</div>
 
-  // console.log('isEdit: ',isEdit);
-  // console.log('selectedBookId: ',selectedBookId);
-  
   return (
-    <section className='book-index-container'>
-      {/* Update a Book */}
-      {isEdit && selectedBookId && (
-        <BookEdit
-          bookId={selectedBookId}
-          onUpdate={onUpdate}
-          setIsEdit={setIsEdit}
-          setSelectedBookId={setSelectedBookId}
-        />
-      )}
-
-      {/* Add a Book */}
-      {isEdit && !selectedBookId && (
-        <BookEdit onAdd={onAdd} setIsEdit={setIsEdit} />
-      )}
-
-      {!isEdit && selectedBookId && (
-        <BookDetails
-          bookId={selectedBookId}
-          setSelectedBookId={setSelectedBookId}
-          setIsEdit={setIsEdit}
-        />
-      )}
-
-      {!isEdit && !selectedBookId && (
+    <section className="book-index-container">
+      {isEdit && (
         <section>
-          <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy} />
-          <button className='btn-add' onClick={() => setIsEdit(true)}>Add Book</button>
-          <BookList
-            books={books}
-            setSelectedBookId={setSelectedBookId}
-            onDelete={onDelete}
-          />
+          
+          {/* Update a Book */}
+          {selectedBookId && (
+            <BookEdit
+              bookId={selectedBookId}
+              onUpdate={onUpdate}
+              setIsEdit={setIsEdit}
+              setSelectedBookId={setSelectedBookId}
+            />
+          )}
+
+          {/* Add a Book */}
+          {!selectedBookId && <BookEdit onAdd={onAdd} setIsEdit={setIsEdit} />}
+        </section>
+      )}
+
+      {!isEdit && (
+        <section>
+          {selectedBookId && (
+            <BookDetails
+              bookId={selectedBookId}
+              setSelectedBookId={setSelectedBookId}
+              setIsEdit={setIsEdit}
+            />
+          )}
+
+          {!selectedBookId && (
+            <section>
+              <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy} />
+
+              <button className="btn-add" onClick={() => setIsEdit(true)}>
+                Add Book
+              </button>
+
+              <BookList
+                books={books}
+                setSelectedBookId={setSelectedBookId}
+                onDelete={onDelete}
+              />
+              {!books.length && <div>No books found</div>}
+            </section>
+          )}
         </section>
       )}
     </section>

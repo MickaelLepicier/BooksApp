@@ -1,9 +1,10 @@
 import { bookService } from '../services/book.service.js'
 import { LongText } from '../cmps/LongText.jsx'
+import { getCurrencySymbol } from '../services/util.service.js'
 
 const { useState, useEffect, useRef } = React
 
-export function BookDetails({ bookId, setSelectedBookId,setIsEdit }) {
+export function BookDetails({ bookId, setSelectedBookId, setIsEdit }) {
   const [book, setBook] = useState(null)
 
   const imgRef = useRef()
@@ -28,23 +29,6 @@ export function BookDetails({ bookId, setSelectedBookId,setIsEdit }) {
       .catch((err) => console.error(`Did not find the book: ${err}`))
   }
 
-  if (!book) return 'Loading...'
-  // console.log('book: ', book)
-
-  const {
-    title,
-    price,
-    language,
-    pageCount,
-    publishedDate,
-    description,
-    isOnSale,
-    imgSrc
-  } = book
-
-  const pageCountMsg = getPageCountMsg(pageCount)
-  const publishedDateMsg = getPublishedDateMsg(publishedDate)
-
   function getPageCountMsg(pageCount) {
     if (!pageCount) return ''
 
@@ -65,12 +49,46 @@ export function BookDetails({ bookId, setSelectedBookId,setIsEdit }) {
     return diff >= 10 ? '(Vintage)' : '(New)'
   }
 
+  function getLanguage(lng) {
+    switch (lng) {
+      case 'he':
+        return 'Hebrew'
+
+      case 'sp':
+        return 'Spanish'
+
+      default:
+        return 'English'
+    }
+  }
+
+  if (!book) return 'Loading...'
+  // console.log('book: ', book)
+
+  const {
+    title,
+    price,
+    currencyCode,
+    language,
+    pageCount,
+    publishedDate,
+    description,
+    isOnSale,
+    thumbnail,
+    imgSrc
+  } = book
+
+  const pageCountMsg = getPageCountMsg(pageCount)
+  const publishedDateMsg = getPublishedDateMsg(publishedDate)
+  const currencySymbol = getCurrencySymbol(currencyCode)
+  const bookLanguage = getLanguage(language)
+
   // TODO later on create more comps for shorter code
 
   return (
     <section className="book-details-container">
       <section className="book-img-wrapper">
-        <img ref={imgRef} src={imgSrc} alt="book-image" />
+        <img ref={imgRef} src={thumbnail || imgSrc} alt="book-image" />
         <div className="ribbon" ref={ribbonRef} hidden>
           <span>On Sale!</span>
         </div>
@@ -88,7 +106,7 @@ export function BookDetails({ bookId, setSelectedBookId,setIsEdit }) {
         )}
         {language && (
           <p>
-            <span>Language: </span> {language}
+            <span>Language: </span> {bookLanguage}
           </p>
         )}
         {pageCount && (
@@ -98,7 +116,10 @@ export function BookDetails({ bookId, setSelectedBookId,setIsEdit }) {
         )}
         <p>
           <span>Price: </span>
-          <span ref={priceRef}>{price}$</span>
+          <span ref={priceRef}>
+            {price}
+            {currencySymbol}
+          </span>
         </p>
         {description && (
           <p>
@@ -108,8 +129,12 @@ export function BookDetails({ bookId, setSelectedBookId,setIsEdit }) {
         )}
 
         <section className="btns-actions">
-          <button onClick={() => setIsEdit(true)}>Edit</button>
-          <button onClick={() => setSelectedBookId(null)}>Close</button>
+          <button name="edit" onClick={() => setIsEdit(true)}>
+            Edit
+          </button>
+          <button name="close" onClick={() => setSelectedBookId(null)}>
+            Close
+          </button>
         </section>
       </section>
     </section>

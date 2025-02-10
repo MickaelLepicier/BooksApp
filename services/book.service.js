@@ -1,10 +1,5 @@
-import { makeId } from './util.service.js'
 import { loadFromStorage, saveToStorage } from './storage.service.js'
 import { booksData } from '../assets/data/books.js'
-
-const BOOK_KEY = 'bookDB'
-
-_createBooks()
 
 export const bookService = {
   query,
@@ -17,9 +12,21 @@ export const bookService = {
   getDefaultFilter
 }
 
-function query(filterBy) {
+window.bs = bookService
+
+const BOOK_KEY = 'bookDB'
+
+_createBooks()
+
+function query(filterBy = {}) {
   return storageService.query(BOOK_KEY).then((books) => {
+    if (!books || !books.length) {
+      books = booksData
+      saveToStorage(BOOK_KEY, books)
+    }
+
     let filteredBooks = [...books]
+
     // console.log('filter: ', filter)
     if (filterBy.title) {
       const regExp = new RegExp(filterBy.title, 'i')
@@ -27,17 +34,22 @@ function query(filterBy) {
     }
 
     if (filterBy.price) {
-      filteredBooks = filteredBooks.filter((book) => book.price >= filterBy.price)
+      filteredBooks = filteredBooks.filter(
+        (book) => book.price >= filterBy.price
+      )
     }
 
     if (filterBy.publishedDate) {
-      filteredBooks = filteredBooks.filter((book) => book.publishedDate >= filterBy.publishedDate)
+      filteredBooks = filteredBooks.filter(
+        (book) => book.publishedDate >= filterBy.publishedDate
+      )
     }
 
     if (filterBy.pageCount) {
-      filteredBooks = filteredBooks.filter((book) => book.pageCount >= filterBy.pageCount)
+      filteredBooks = filteredBooks.filter(
+        (book) => book.pageCount >= filterBy.pageCount
+      )
     }
-    // console.log('books: ', books)
     return filteredBooks
   })
 }
@@ -66,8 +78,15 @@ function save(book) {
   }
 }
 
-function getEmptyBook(id = '', title = '', listPrice = '', publishedDate = '', pageCount = '') {
-  return { id, title, listPrice, publishedDate, pageCount }
+function getEmptyBook(
+  id = '',
+  title = '',
+  listPrice = '',
+  publishedDate = '',
+  pageCount = '',
+  currencyCode = '$'
+) {
+  return { id, title, listPrice, publishedDate, pageCount, currencyCode }
 }
 
 function getDefaultFilter() {
@@ -83,20 +102,22 @@ function _createBooks() {
 }
 
 function _createBook(book, idx) {
-let newBook = {
-  id: book.id,
-  title: book.title,
-  price: book.listPrice.amount,
-  language:book.language,
-  description:book.description,
-  publishedDate: book.publishedDate,
-  pageCount: book.pageCount,
-  isOnSale: book.listPrice.isOnSale,
-  imgSrc: `../assets/img/${idx + 1}.jpg`
-}
-// console.log('newBook: ',newBook);
+  let newBook = {
+    id: book.id,
+    title: book.title,
+    price: book.listPrice.amount,
+    language: book.language,
+    description: book.description,
+    publishedDate: book.publishedDate,
+    pageCount: book.pageCount,
+    isOnSale: book.listPrice.isOnSale,
+    currencyCode: book.listPrice.currencyCode,
+    thumbnail: book.thumbnail,
+    imgSrc: `../assets/img/${idx + 1}.jpg`
+  }
+  // console.log('newBook: ',newBook);
 
-return newBook
+  return newBook
 }
 
 /*

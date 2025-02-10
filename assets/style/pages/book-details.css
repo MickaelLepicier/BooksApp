@@ -3,13 +3,15 @@
   gap: 20px;
   justify-self: center;
 
-  max-width: 80vw;
+  max-width: 700px;
   margin-block: 1em 0;
   padding: 1em;
   font-size: 1.2em;
 
   border-radius: 10px;
   background-color: aquamarine;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+
 }
 
 .book-img-wrapper {
@@ -83,15 +85,40 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  align-items: start;
+}
+
+.book-info p:last-of-type{
+  text-align: start;
+}
+
+.long-text-btn{
+  /* background-color: black; */
+  margin: 2px 5px;
 }
 
 .btns-actions {
   display: flex;
   justify-content: space-evenly;
   margin-top: auto;
+  align-self: center;
 }
 
 .btns-actions button {
-  min-width: 40%;
+  min-width: 100px;
   font-size: 0.9em;
+}
+
+button[name="edit"]{
+  background-color: #007bff;
+  color: white;
+}
+
+button[name="close"]{
+  background-color: #dc3545;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.8;
 }
