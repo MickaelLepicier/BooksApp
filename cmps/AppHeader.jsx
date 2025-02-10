@@ -10,8 +10,9 @@ export function AppHeader({ page, onSetPage }) {
       <h1 onClick={() => onSetPage('home')}>Books App</h1>
      
       <nav className="app-nav">
+        <NavLink to="/">Home</NavLink>
 
-        <a href="#" className={onActive('home')} 
+        {/* <a href="#" className={onActive('home')} 
             onClick={() => onSetPage('home')}>
           Home
         </a>
@@ -23,7 +24,7 @@ export function AppHeader({ page, onSetPage }) {
         <a href="#" className={onActive('books')} 
             onClick={() => onSetPage('books')}>
           Books
-        </a>
+        </a> */}
       </nav>
     </header>
   )

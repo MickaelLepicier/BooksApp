@@ -4,8 +4,12 @@ import { getCurrencySymbol } from '../services/util.service.js'
 
 const { useState, useEffect, useRef } = React
 
+const {useParams, useNavigation,Link } = ReactRouterDom
+
 export function BookDetails({ bookId, setSelectedBookId, setIsEdit }) {
   const [book, setBook] = useState(null)
+
+const params = useParams() // the bookId is inside this hook
 
   const imgRef = useRef()
   const ribbonRef = useRef()
@@ -13,7 +17,7 @@ export function BookDetails({ bookId, setSelectedBookId, setIsEdit }) {
 
   useEffect(() => {
     loadBook()
-  }, [])
+  }, [params.bookId])
 
   useEffect(() => {
     if (book && priceRef.current) {
@@ -24,7 +28,7 @@ export function BookDetails({ bookId, setSelectedBookId, setIsEdit }) {
 
   function loadBook() {
     bookService
-      .get(bookId)
+      .get(params.bookId)
       .then((book) => setBook(book))
       .catch((err) => console.error(`Did not find the book: ${err}`))
   }
@@ -129,12 +133,15 @@ export function BookDetails({ bookId, setSelectedBookId, setIsEdit }) {
         )}
 
         <section className="btns-actions">
-          <button name="edit" onClick={() => setIsEdit(true)}>
+          {/* <button name="edit" onClick={() => setIsEdit(true)}>
             Edit
           </button>
           <button name="close" onClick={() => setSelectedBookId(null)}>
             Close
-          </button>
+          </button> */}
+
+          <button><Link to="/book" > Edit </Link></button>
+          <button><Link to="/book" > Close </Link></button>
         </section>
       </section>
     </section>

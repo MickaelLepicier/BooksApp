@@ -1,10 +1,16 @@
+
+
+const { useState } = React
+const Router = ReactRouterDOM.HashRouter
+const {Routes, Route} = ReactRouterDOM
+
 import { HomePage } from './pages/HomePage.jsx'
 import { AboutUs } from './pages/AboutUs.jsx'
 import { BookIndex } from './pages/BookIndex.jsx'
 
 import { AppHeader } from './cmps/AppHeader.jsx'
+import { BookDetails } from './pages/BookDetails.jsx'
 
-const { useState } = React
 
 // TODO
 // change colors on CSS
@@ -21,15 +27,35 @@ export function App() {
     setPage(page)
   }
 
-  return (
+  return ( <Router>
     <section className="app">
+      
       <AppHeader page={page} onSetPage={onSetPage} />
 
       <main className="main-layout">
-        {page === 'home' && <HomePage />}
+      <Routes>
+        <Route path="/" element={<HomePage />}/>
+        <Route path="/about" element={<AboutUs />}/>
+        <Route path="/book" element={<BookIndex />}/>
+        <Route path="/book/:bookId" element={<BookDetails />}/>
+        <Route path="/book/edit" element={<BookEdit />}/>
+        <Route path="/book/edit/:bookId" element={<BookEdit />}/>
+        
+        <Route path="/book/:bookId" element={<BookDetails />}>
+          <Route path="test" element={<Test />}/>
+          <Route path="test" element={<Test />}/>
+        </Route>
+
+      </Routes>
+      
+        {/* {page === 'home' && <HomePage />}
         {page === 'about' && <AboutUs />}
         {page === 'books' && <BookIndex />}
-      </main>
+          */}
+
+          {/* <UserMsg/> */}
+        </main> 
     </section>
+    </Router>
   )
 }

@@ -8,6 +8,8 @@ export function BookEdit({ bookId, onAdd, onUpdate, setIsEdit, setSelectedBookId
   const currFunc = bookId ? onUpdate : onAdd
   const headerMsg = bookId ? 'Update' : 'Add'
 
+const {bookId} = useParams()
+
   useEffect(() => {
     if (bookId) {
       bookService.get(bookId).then((book) => {

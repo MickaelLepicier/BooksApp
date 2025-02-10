@@ -6,6 +6,7 @@ import { bookService } from '../services/book.service.js'
 
 const { useState, useEffect } = React
 
+// I can do that the Add Book will be a Modal or Nested Route (Route inside Route)
 export function BookIndex() {
   const [books, setBooks] = useState(null)
   const [filterBy, setFilterBy] = useState(bookService.getDefaultFilter())
@@ -32,15 +33,30 @@ export function BookIndex() {
     bookService
       .post(newBook)
       .then(() => {
+        // TODO put the msg on msg Modal
+        // navigate("/book")
+        // navigate("-1")
+        // event-bus.service.js - for the <UserMsg/>:
+        //eventBusService.emit("show-user-msg", {txt:"Book is saved"})
+        //showUserMsg("show-user-msg", {txt:"Book is saved"})
+        //showUserMsg("show-user-msg")
+
         console.log('Book is saved')
       })
-      .catch((err) => console.log(`The book did not Added: ${err}`))
+      .catch((err) =>{
+        //showUserMsg("show-user-msg", {txt:"Book is saved"})
+        //showUserMsg("show-user-msg")
+        
+        console.log(`The book did not Added: ${err}`)})
   }
 
   function onUpdate(book) {
     bookService
       .put(book)
-      .then(() => console.log('Book is updated'))
+      .then(() =>{
+        // TODO put the msg on msg Modal
+        // navigate("/book")
+        console.log('Book is updated')})
       .catch((err) => console.log(`The book did not Updated: ${err}`))
   }
 
