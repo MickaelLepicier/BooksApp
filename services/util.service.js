@@ -47,15 +47,24 @@ export function getRandomIntInclusive(min, max) {
 // }
 
 export function getCurrencySymbol(currencyCode) {
-    let symbol = '$'
+    switch (currencyCode) {  
+        case 'EUR':
+            return '€'  
 
-    if (currencyCode === 'EUR') {
-      symbol = '€'
-    } else if (currencyCode === 'ILS') {
-      symbol = '₪'
+        case 'ILS':
+            return '₪'
+            
+        default: return '$'
     }
+    // let symbol = '$'
 
-    return symbol
+    // if (currencyCode === 'EUR') {
+    //   symbol = '€'
+    // } else if (currencyCode === 'ILS') {
+    //   symbol = '₪'
+    // }
+
+    // return symbol
   }
 
 export function getDayName(date, locale) {

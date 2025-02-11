@@ -6,12 +6,15 @@ import { bookService } from '../services/book.service.js'
 
 const { useState, useEffect } = React
 
+const {useParams, useNavigation,Link } = ReactRouterDOM
+
 // I can do that the Add Book will be a Modal or Nested Route (Route inside Route)
 export function BookIndex() {
   const [books, setBooks] = useState(null)
   const [filterBy, setFilterBy] = useState(bookService.getDefaultFilter())
-  const [selectedBookId, setSelectedBookId] = useState(null)
-  const [isEdit, setIsEdit] = useState(false)
+
+  // const [selectedBookId, setSelectedBookId] = useState(null)
+  // const [isEdit, setIsEdit] = useState(false)
 
   useEffect(() => {
     loadBooks()
@@ -20,9 +23,7 @@ export function BookIndex() {
   function loadBooks() {
     bookService
       .query(filterBy)
-      .then((books) => {
-        setBooks(books)
-      })
+      .then(setBooks)
       .catch((err) => console.error('Could not get the Books Data: ', err))
   }
 
@@ -43,20 +44,22 @@ export function BookIndex() {
 
         console.log('Book is saved')
       })
-      .catch((err) =>{
+      .catch((err) => {
         //showUserMsg("show-user-msg", {txt:"Book is saved"})
         //showUserMsg("show-user-msg")
-        
-        console.log(`The book did not Added: ${err}`)})
+
+        console.log(`The book did not Added: ${err}`)
+      })
   }
 
   function onUpdate(book) {
     bookService
       .put(book)
-      .then(() =>{
+      .then(() => {
         // TODO put the msg on msg Modal
         // navigate("/book")
-        console.log('Book is updated')})
+        console.log('Book is updated')
+      })
       .catch((err) => console.log(`The book did not Updated: ${err}`))
   }
 
@@ -64,20 +67,40 @@ export function BookIndex() {
     bookService
       .remove(bookId)
       .then(() => {
+        // TODO put the msg on msg Modal - 'Book has been Deleted'
+
         console.log('Book has been Deleted')
         setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId))
       })
       .catch((err) => console.log('Book has not been Deleted:', err))
   }
 
+  function onSetFilter(filterByToEdit){
+    setFilterBy(prevFilter =>({...prevFilter, ...filterByToEdit}))
+  }
+
   if (!books) return <div>Loading...</div>
 
   return (
     <section className="book-index-container">
-      {isEdit && (
+      <BooksFilter filterBy={filterBy} onSetFilter={onSetFilter} />
+
+      <button className="btn-add">
+        <Link to="/book/edit">Add Book</Link>
+      </button>
+
+      <BookList books={books} onDelete={onDelete} />
+
+      {!books.length && <div>No books found</div>}
+    </section>
+  )
+}
+
+/*
+
+     {isEdit && (
         <section>
-          
-          {/* Update a Book */}
+          // Update a Book 
           {selectedBookId && (
             <BookEdit
               bookId={selectedBookId}
@@ -87,10 +110,11 @@ export function BookIndex() {
             />
           )}
 
-          {/* Add a Book */}
+          // Add a Book 
           {!selectedBookId && <BookEdit onAdd={onAdd} setIsEdit={setIsEdit} />}
         </section>
       )}
+
 
       {!isEdit && (
         <section>
@@ -102,24 +126,15 @@ export function BookIndex() {
             />
           )}
 
-          {!selectedBookId && (
-            <section>
-              <BooksFilter filterBy={filterBy} setFilterBy={setFilterBy} />
+           {!selectedBookId && (  
+           
+           )}
 
-              <button className="btn-add" onClick={() => setIsEdit(true)}>
+          </section>
+           )}
+
+           <button className="btn-add" onClick={() => setIsEdit(true)}>
                 Add Book
               </button>
 
-              <BookList
-                books={books}
-                setSelectedBookId={setSelectedBookId}
-                onDelete={onDelete}
-              />
-              {!books.length && <div>No books found</div>}
-            </section>
-          )}
-        </section>
-      )}
-    </section>
-  )
-}
+*/

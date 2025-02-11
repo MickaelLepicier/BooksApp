@@ -4,7 +4,7 @@ import { getCurrencySymbol } from '../services/util.service.js'
 
 const { useState, useEffect, useRef } = React
 
-const {useParams, useNavigation,Link } = ReactRouterDom
+const {useParams, useNavigation,Link } = ReactRouterDOM
 
 export function BookDetails({ bookId, setSelectedBookId, setIsEdit }) {
   const [book, setBook] = useState(null)
@@ -140,7 +140,7 @@ const params = useParams() // the bookId is inside this hook
             Close
           </button> */}
 
-          <button><Link to="/book" > Edit </Link></button>
+          <button><Link to="/book/edit" > Edit </Link></button>
           <button><Link to="/book" > Close </Link></button>
         </section>
       </section>

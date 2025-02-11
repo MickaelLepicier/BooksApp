@@ -1,11 +1,11 @@
 const { useState, useEffect } = React
 
-export function BooksFilter({ filterBy, setFilterBy }) {
+export function BooksFilter({ filterBy, onSetFilter }) {
   const [booksFilter, setBooksFilter] = useState({ ...filterBy })
 
   useEffect(() => {
     let timeOutId = setTimeout(() => {
-      setFilterBy(booksFilter)
+      onSetFilter(booksFilter)
     }, 500)
 
     return () => clearTimeout(timeOutId)
@@ -16,13 +16,16 @@ export function BooksFilter({ filterBy, setFilterBy }) {
 
     if (type === 'number') value = +value
 
-    setBooksFilter((prevBooksFilter) => ({ ...prevBooksFilter, [field]: value }))
+    setBooksFilter((prevBooksFilter) => ({
+      ...prevBooksFilter,
+      [field]: value
+    }))
   }
 
   return (
     <section className="filter-form">
       <h1>Filter Books</h1>
-      <form onSubmit={setFilterBy}>
+      <form onSubmit={onSetFilter}>
         <input
           type="text"
           name="title"

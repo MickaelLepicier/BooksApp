@@ -1,35 +1,52 @@
 import { bookService } from '../services/book.service.js'
+const { get, getEmptyBook, save } = bookService
 
 const { useState, useEffect } = React
 
-export function BookEdit({ bookId, onAdd, onUpdate, setIsEdit, setSelectedBookId }) {
+const { useParams, useNavigate, Link } = ReactRouterDOM
+
+export function BookEdit() {
+  // { bookId, onAdd, onUpdate, setIsEdit, setSelectedBookId }
+
   const [book, setBook] = useState(null)
 
-  const currFunc = bookId ? onUpdate : onAdd
-  const headerMsg = bookId ? 'Update' : 'Add'
+  const { bookId } = useParams()
 
-const {bookId} = useParams()
+  const navigate = useNavigate()
+
+  // const currFunc = bookId ? onUpdate : onAdd
+
+  // TODO - FIX BUG ADD A BOOK
+  // bookId = undefined...
 
   useEffect(() => {
     if (bookId) {
-      bookService.get(bookId).then((book) => {
+      get(bookId).then((book) => {
         setBook(book)
       })
     } else {
-      setBook(bookService.getEmptyBook())
+      setBook(getEmptyBook())
     }
   }, [])
 
   function onSubmit(ev) {
     ev.preventDefault()
-    currFunc(book)
-    onClose()
+    // currFunc(book)
+    save(book)
+      .then((savedBook) => {
+        console.log('savedBook: ', savedBook)
+        onClose()
+        // navigate('/book')
+      })
+      .catch((err) => console.log(err))
   }
 
   function onClose() {
-    setIsEdit(false)
-    if (!bookId) return
-    setSelectedBookId(null)
+    // setIsEdit(false)
+    // if (!bookId) return
+    // setSelectedBookId(null)
+
+    navigate('/book')
   }
 
   function updateBook(ev) {
@@ -41,9 +58,11 @@ const {bookId} = useParams()
 
   if (!book) return 'Loading...'
   // title, listPrice, publishedDate, pageCount, isOnSale
+
+  // TODO - FIX BUG ADD A BOOK
   return (
     <section className="book-edit-container">
-      <h1>{headerMsg} a Book!</h1>
+      <h1>{book.id ? 'Update' : 'Add'} a Book!</h1>
 
       <form onSubmit={onSubmit}>
         <div className="form-group">

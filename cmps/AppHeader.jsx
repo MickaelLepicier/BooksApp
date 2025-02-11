@@ -1,16 +1,22 @@
-export function AppHeader({ page, onSetPage }) {
- 
-    function onActive(val) {
-    return page === val ? 'active' : ''
-  }
+const { Link, NavLink } = ReactRouterDOM
+
+export function AppHeader() {
+  // function onActive(val) {
+  //   return page === val ? 'active' : ''
+  // }
 
   return (
     <header className="app-header main-layout">
-    
-      <h1 onClick={() => onSetPage('home')}>Books App</h1>
-     
+      {/* <h1 onClick={() => onSetPage('home')}>Books App</h1> */}
+
+      <h1>
+        <Link to="/">Books App</Link>
+      </h1>
+      
       <nav className="app-nav">
         <NavLink to="/">Home</NavLink>
+        <NavLink to="/about">About</NavLink>
+        <NavLink to="/book">Books</NavLink>
 
         {/* <a href="#" className={onActive('home')} 
             onClick={() => onSetPage('home')}>
