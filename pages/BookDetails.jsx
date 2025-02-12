@@ -1,15 +1,17 @@
 import { bookService } from '../services/book.service.js'
 import { LongText } from '../cmps/LongText.jsx'
 import { getCurrencySymbol } from '../services/util.service.js'
+import { AddReview } from '../cmps/AddReview.jsx'
 
 const { useState, useEffect, useRef } = React
 
-const {useParams, useNavigation,Link } = ReactRouterDOM
+const { useParams, useNavigation, Link } = ReactRouterDOM
 
-export function BookDetails({ bookId, setSelectedBookId, setIsEdit }) {
+export function BookDetails() {
   const [book, setBook] = useState(null)
+  const [IsAddReview, setIsAddReview] = useState(false)
 
-const params = useParams() // the bookId is inside this hook
+  const params = useParams() // the bookId is inside this hook
 
   const imgRef = useRef()
   const ribbonRef = useRef()
@@ -54,16 +56,19 @@ const params = useParams() // the bookId is inside this hook
   }
 
   function getLanguage(lng) {
-    switch (lng) {
-      case 'he':
-        return 'Hebrew'
-
-      case 'sp':
-        return 'Spanish'
-
-      default:
-        return 'English'
+    const lngMap ={
+      he: 'Hebrew',
+      sp: 'Spanish',
+      en: 'English',
     }
+
+    return lngMap[lng]
+  }
+
+  
+  function saveReview(){
+    // create a function that save the review and set the book
+    //
   }
 
   if (!book) return 'Loading...'
@@ -72,11 +77,13 @@ const params = useParams() // the bookId is inside this hook
   const {
     title,
     price,
+    authors,
     currencyCode,
     language,
     pageCount,
     publishedDate,
     description,
+    reviews,
     isOnSale,
     thumbnail,
     imgSrc
@@ -86,8 +93,19 @@ const params = useParams() // the bookId is inside this hook
   const publishedDateMsg = getPublishedDateMsg(publishedDate)
   const currencySymbol = getCurrencySymbol(currencyCode)
   const bookLanguage = getLanguage(language)
+ 
+  const bookReviews = reviews.length ? reviews : ' There are no reviews'
+  // TODO Create reviewList & reviewPreview
 
   // TODO later on create more comps for shorter code
+
+  // TODO Put const { Routes, Route } = ReactRouterDOM in <AddReview>
+
+  // btn Add Review - <AddReview>
+  // open on the same page fullname, rating, readAt
+  // create - bookService.addReview(bookId, review) file
+  // render a list of the reviews
+  // CSS make the .book-details-container as grid
 
   return (
     <section className="book-details-container">
@@ -96,12 +114,30 @@ const params = useParams() // the bookId is inside this hook
         <div className="ribbon" ref={ribbonRef} hidden>
           <span>On Sale!</span>
         </div>
+        <section className="btns-actions">
+          <button>
+            <Link to={`/book/edit/${book.id}`}> Edit </Link>
+          </button>
+          <button>
+            <Link to="/book"> Add Reviews </Link>
+          </button>
+          <button>
+            <Link to="/book"> Close </Link>
+          </button>
+
+        </section>
       </section>
 
       <section className="book-info">
         <h2>
           <span>Title:</span> {title}
         </h2>
+        {authors && (
+          <p>
+            <span>Author: </span>
+            {authors}
+          </p>
+        )}
         {publishedDate && (
           <p>
             <span>Published Date: </span>
@@ -131,19 +167,24 @@ const params = useParams() // the bookId is inside this hook
             <LongText description={description} />
           </p>
         )}
-
-        <section className="btns-actions">
-          {/* <button name="edit" onClick={() => setIsEdit(true)}>
-            Edit
-          </button>
-          <button name="close" onClick={() => setSelectedBookId(null)}>
-            Close
-          </button> */}
-
-          <button><Link to="/book/edit" > Edit </Link></button>
-          <button><Link to="/book" > Close </Link></button>
-        </section>
+        <p>
+          <span>Reviews:</span>
+          {bookReviews}
+        </p>
+        {/* <AddReview saveReview={saveReview}/> */}
       </section>
     </section>
   )
 }
+
+/*
+
+              <button name="edit" onClick={() => setIsEdit(true)}>
+                 Edit
+              </button>
+        
+              <button name="close" onClick={() => setSelectedBookId(null)}>
+                 Close
+              </button>
+          
+          */

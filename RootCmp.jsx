@@ -18,13 +18,9 @@ import { UserMsg } from './cmps/UserMsg.jsx'
 // Later on learn RegExp
 // Fix bug on LongText - when I press "More" the box don't need to go down
 // Make the CSS files the same name as the jsx files
+//
 
 export function App() {
-  // const [page, setPage] = useState('books')
-
-  // function onSetPage(page) {
-  //   setPage(page)
-  // }
 
   return (
     <Router>
@@ -46,13 +42,3 @@ export function App() {
     </Router>
   )
 }
-
-/* <Route path="/book/:bookId" element={<BookDetails />}>
-              <Route path="test" element={<Test />} />
-              <Route path="test" element={<Test />} />
-            </Route> */
-
-/* {page === 'home' && <HomePage />}
-        {page === 'about' && <AboutUs />}
-        {page === 'books' && <BookIndex />}
-          */

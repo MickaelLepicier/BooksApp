@@ -102,12 +102,15 @@ function _createBooks() {
 }
 
 function _createBook(book, idx) {
+  // console.log('book: ', book.authors.join(', '))
   let newBook = {
     id: book.id,
     title: book.title,
     price: book.listPrice.amount,
+    authors: book.authors.join(', '),
     language: book.language,
     description: book.description,
+    reviews: [],
     publishedDate: book.publishedDate,
     pageCount: book.pageCount,
     isOnSale: book.listPrice.isOnSale,

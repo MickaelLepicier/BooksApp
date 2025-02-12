@@ -3,10 +3,11 @@ import { BookList } from '../cmps/BookList.jsx'
 import { BooksFilter } from '../cmps/BooksFilter.jsx'
 import { BookEdit } from './BookEdit.jsx'
 import { bookService } from '../services/book.service.js'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
 const { useState, useEffect } = React
 
-const {useParams, useNavigation,Link } = ReactRouterDOM
+const { useParams, useNavigation, Link } = ReactRouterDOM
 
 // I can do that the Add Book will be a Modal or Nested Route (Route inside Route)
 export function BookIndex() {
@@ -52,7 +53,7 @@ export function BookIndex() {
       })
   }
 
-  function onUpdate(book) {
+  function onUp1date(book) {
     bookService
       .put(book)
       .then(() => {
@@ -63,20 +64,21 @@ export function BookIndex() {
       .catch((err) => console.log(`The book did not Updated: ${err}`))
   }
 
-  function onDelete(bookId) {
+  function onRemove(bookId) {
     bookService
       .remove(bookId)
       .then(() => {
-        // TODO put the msg on msg Modal - 'Book has been Deleted'
-
-        console.log('Book has been Deleted')
         setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId))
+        showSuccessMsg('Book has been Deleted')
       })
-      .catch((err) => console.log('Book has not been Deleted:', err))
+      .catch((err) => {
+        console.log(err)
+        showErrorMsg('Book has not been Deleted')
+      })
   }
 
-  function onSetFilter(filterByToEdit){
-    setFilterBy(prevFilter =>({...prevFilter, ...filterByToEdit}))
+  function onSetFilter(filterByToEdit) {
+    setFilterBy((prevFilter) => ({ ...prevFilter, ...filterByToEdit }))
   }
 
   if (!books) return <div>Loading...</div>
@@ -89,7 +91,7 @@ export function BookIndex() {
         <Link to="/book/edit">Add Book</Link>
       </button>
 
-      <BookList books={books} onDelete={onDelete} />
+      <BookList books={books} onRemove={onRemove} />
 
       {!books.length && <div>No books found</div>}
     </section>

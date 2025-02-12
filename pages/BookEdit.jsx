@@ -1,4 +1,6 @@
 import { bookService } from '../services/book.service.js'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
+
 const { get, getEmptyBook, save } = bookService
 
 const { useState, useEffect } = React
@@ -16,9 +18,6 @@ export function BookEdit() {
 
   // const currFunc = bookId ? onUpdate : onAdd
 
-  // TODO - FIX BUG ADD A BOOK
-  // bookId = undefined...
-
   useEffect(() => {
     if (bookId) {
       get(bookId).then((book) => {
@@ -31,21 +30,21 @@ export function BookEdit() {
 
   function onSubmit(ev) {
     ev.preventDefault()
-    // currFunc(book)
+
+    const msg = book.id ? 'Updated' : 'Added'
+
     save(book)
-      .then((savedBook) => {
-        console.log('savedBook: ', savedBook)
+      .then(() => {
+        showSuccessMsg(`The book is ${msg}`)
         onClose()
-        // navigate('/book')
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        showErrorMsg(`The book didn't ${msg}`)
+      })
   }
 
   function onClose() {
-    // setIsEdit(false)
-    // if (!bookId) return
-    // setSelectedBookId(null)
-
     navigate('/book')
   }
 
@@ -57,9 +56,7 @@ export function BookEdit() {
   }
 
   if (!book) return 'Loading...'
-  // title, listPrice, publishedDate, pageCount, isOnSale
 
-  // TODO - FIX BUG ADD A BOOK
   return (
     <section className="book-edit-container">
       <h1>{book.id ? 'Update' : 'Add'} a Book!</h1>

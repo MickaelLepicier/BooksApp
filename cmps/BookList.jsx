@@ -3,7 +3,7 @@ import { BookPreview } from './BookPreview.jsx'
 const { Link } = ReactRouterDOM
 // const { useParams, useNavigate, Link } = ReactRouterDOM
 
-export function BookList({ books, onDelete }) {
+export function BookList({ books, onRemove }) {
   return (
     <section className="books-container">
       {books.map((book) => {
@@ -16,13 +16,8 @@ export function BookList({ books, onDelete }) {
               <button>
                 <Link to={`/book/${book.id}`}> Details </Link>
               </button>
-              <button
-                onClick={() => {
-                  onDelete(book.id)
-                }}
-              >
-                {' '}
-                Delete{' '}
+              <button onClick={() => { onRemove(book.id)}}>
+                Delete
               </button>
             </section>
           </section>
