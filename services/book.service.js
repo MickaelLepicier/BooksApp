@@ -8,6 +8,7 @@ export const bookService = {
   put,
   remove,
   save,
+  addReview,
   getEmptyBook,
   getDefaultFilter
 }
@@ -78,6 +79,17 @@ function save(book) {
   }
 }
 
+function addReview(bookId, review) {
+  return get(bookId)
+    .then((book) => {
+      book.reviews.push(review)
+      // console.log('book review: ', book)
+      save(book)
+      return book
+    })
+    .catch((err) => console.log('err: ', err))
+}
+
 function getEmptyBook(
   id = '',
   title = '',
@@ -86,6 +98,8 @@ function getEmptyBook(
   pageCount = '',
   currencyCode = '$'
 ) {
+  // TODO check at the end if I call this function with props
+  // if not so I can return without the props
   return { id, title, listPrice, publishedDate, pageCount, currencyCode }
 }
 

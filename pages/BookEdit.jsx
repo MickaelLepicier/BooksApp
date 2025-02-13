@@ -73,6 +73,7 @@ export function BookEdit() {
             required
           />
         </div>
+        
         <div className="form-group">
           <label htmlFor="price">Price:</label>
           <input

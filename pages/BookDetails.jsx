@@ -56,19 +56,25 @@ export function BookDetails() {
   }
 
   function getLanguage(lng) {
-    const lngMap ={
+    const lngMap = {
       he: 'Hebrew',
       sp: 'Spanish',
-      en: 'English',
+      en: 'English'
     }
 
     return lngMap[lng]
   }
 
-  
-  function saveReview(){
-    // create a function that save the review and set the book
-    //
+  function saveReview(review) {
+    // save the review and set the book
+
+    bookService
+      .addReview(params.bookId, review)
+      .then((book) => {
+        console.log('book: ', book)
+        setBook(book)
+      })
+      .catch((err) => console.log('err: ', err))
   }
 
   if (!book) return 'Loading...'
@@ -93,8 +99,23 @@ export function BookDetails() {
   const publishedDateMsg = getPublishedDateMsg(publishedDate)
   const currencySymbol = getCurrencySymbol(currencyCode)
   const bookLanguage = getLanguage(language)
- 
-  const bookReviews = reviews.length ? reviews : ' There are no reviews'
+  const bookReviews = renderReviews(reviews)
+
+  function renderReviews(reviews) {
+    if (!reviews.length) return ' There are no reviews'
+
+    const { fullName, rating, date } = reviews[0]
+    // map the shit of the reviews ;)
+
+    // {fullName: 'cvcv', rating: 324, date: '2025-02-13'}
+
+    return (
+      <React.Fragment>
+        ' ' {fullName} - {rating} - {date}
+      </React.Fragment>
+    )
+  }
+
   // TODO Create reviewList & reviewPreview
 
   // TODO later on create more comps for shorter code
@@ -124,7 +145,6 @@ export function BookDetails() {
           <button>
             <Link to="/book"> Close </Link>
           </button>
-
         </section>
       </section>
 
@@ -171,7 +191,7 @@ export function BookDetails() {
           <span>Reviews:</span>
           {bookReviews}
         </p>
-        {/* <AddReview saveReview={saveReview}/> */}
+        <AddReview saveReview={saveReview} />
       </section>
     </section>
   )
