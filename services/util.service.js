@@ -129,6 +129,16 @@ export function getMonthName(date) {
   return monthNames[date.getMonth()]
 }
 
+export function updateRating(starsRef,rate) {
+  const stars = starsRef.current.querySelectorAll('i')
+  // console.log('stars: ',stars)
+
+  stars.forEach((star, idx)=>{
+    if(rate >= idx + 1 ) star.classList.add('active')
+      else star.classList.remove('active')
+  })
+}
+
 export function animateCSS(el, animation = 'bounce') {
   const prefix = 'animate__'
   return new Promise((resolve, reject) => {

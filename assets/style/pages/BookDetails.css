@@ -1,5 +1,12 @@
 .book-details-container {
-  display: flex;
+  /* display: flex; */
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas:
+    'img info'
+    'btns btns'
+    'reviews reviews';
   gap: 20px;
   justify-self: center;
 
@@ -15,6 +22,7 @@
 
 .book-img-wrapper {
   position: relative;
+  grid-area: img;
 }
 
 .book-img-wrapper img {
@@ -85,6 +93,8 @@
   flex-direction: column;
   flex-grow: 1;
   align-items: start;
+
+  grid-area: info;
 }
 
 .book-info h2 {
@@ -105,6 +115,7 @@
   justify-content: space-evenly;
   margin-top: auto;
   align-self: center;
+  grid-area: btns;
 }
 
 .btns-actions button {
@@ -124,4 +135,8 @@ button[name='close'] {
 
 button:hover {
   opacity: 0.8;
+}
+
+.reviews-container {
+  grid-area: reviews;
 }

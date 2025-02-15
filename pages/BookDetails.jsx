@@ -2,6 +2,7 @@ import { bookService } from '../services/book.service.js'
 import { LongText } from '../cmps/LongText.jsx'
 import { getCurrencySymbol } from '../services/util.service.js'
 import { AddReview } from '../cmps/AddReview.jsx'
+import { ReviewList } from '../cmps/ReviewList.jsx'
 
 const { useState, useEffect, useRef } = React
 
@@ -77,6 +78,17 @@ export function BookDetails() {
       .catch((err) => console.log('err: ', err))
   }
 
+  function onRemove(reviewId) {
+    const updatedReviews = reviews.filter((review) => review.id !== reviewId)
+    setBook((prevBook) => ({ ...prevBook, reviews: updatedReviews }))
+
+    bookService.removeReview(params.bookId, updatedReviews)
+  }
+
+  function onClose() {
+    setIsAddReview(false)
+  }
+
   if (!book) return 'Loading...'
   // console.log('book: ', book)
 
@@ -99,32 +111,13 @@ export function BookDetails() {
   const publishedDateMsg = getPublishedDateMsg(publishedDate)
   const currencySymbol = getCurrencySymbol(currencyCode)
   const bookLanguage = getLanguage(language)
-  const bookReviews = renderReviews(reviews)
-
-  function renderReviews(reviews) {
-    if (!reviews.length) return ' There are no reviews'
-
-    const { fullName, rating, date } = reviews[0]
-    // map the shit of the reviews ;)
-
-    // {fullName: 'cvcv', rating: 324, date: '2025-02-13'}
-
-    return (
-      <React.Fragment>
-        ' ' {fullName} - {rating} - {date}
-      </React.Fragment>
-    )
-  }
 
   // TODO Create reviewList & reviewPreview
 
   // TODO later on create more comps for shorter code
 
-  // TODO Put const { Routes, Route } = ReactRouterDOM in <AddReview>
-
-  // btn Add Review - <AddReview>
-  // open on the same page fullname, rating, readAt
-  // create - bookService.addReview(bookId, review) file
+  // Put const { Routes, Route } = ReactRouterDOM in <AddReview>
+  // Show modal with: fullname, rating, readAt
   // render a list of the reviews
   // CSS make the .book-details-container as grid
 
@@ -135,17 +128,6 @@ export function BookDetails() {
         <div className="ribbon" ref={ribbonRef} hidden>
           <span>On Sale!</span>
         </div>
-        <section className="btns-actions">
-          <button>
-            <Link to={`/book/edit/${book.id}`}> Edit </Link>
-          </button>
-          <button>
-            <Link to="/book"> Add Reviews </Link>
-          </button>
-          <button>
-            <Link to="/book"> Close </Link>
-          </button>
-        </section>
       </section>
 
       <section className="book-info">
@@ -187,12 +169,19 @@ export function BookDetails() {
             <LongText description={description} />
           </p>
         )}
-        <p>
-          <span>Reviews:</span>
-          {bookReviews}
-        </p>
-        <AddReview saveReview={saveReview} />
       </section>
+      <section className="btns-actions">
+        <button>
+          <Link to={`/book/edit/${book.id}`}> Edit </Link>
+        </button>
+        <button onClick={() => setIsAddReview(true)}>Add Reviews</button>
+        <button>
+          <Link to="/book"> Close </Link>
+        </button>
+      </section>
+      <ReviewList reviews={reviews} onRemove={onRemove} />
+      {/* TODO in modal */}
+      {IsAddReview && <AddReview saveReview={saveReview} onClose={onClose} />}
     </section>
   )
 }

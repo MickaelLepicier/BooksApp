@@ -1,0 +1,7 @@
+.reviews li {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+  align-items: center;
+  list-style-type: none;
+}

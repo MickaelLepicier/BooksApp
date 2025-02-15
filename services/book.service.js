@@ -1,5 +1,6 @@
 import { loadFromStorage, saveToStorage } from './storage.service.js'
 import { booksData } from '../assets/data/books.js'
+import { makeId } from './util.service.js'
 
 export const bookService = {
   query,
@@ -9,6 +10,7 @@ export const bookService = {
   remove,
   save,
   addReview,
+  removeReview,
   getEmptyBook,
   getDefaultFilter
 }
@@ -80,6 +82,7 @@ function save(book) {
 }
 
 function addReview(bookId, review) {
+  review.id = makeId()
   return get(bookId)
     .then((book) => {
       book.reviews.push(review)
@@ -89,6 +92,17 @@ function addReview(bookId, review) {
     })
     .catch((err) => console.log('err: ', err))
 }
+
+function removeReview(bookId, updatedReviews){
+  return get(bookId)
+  .then((book) => {
+    book.reviews = updatedReviews
+    save(book)
+    return book
+  })
+  .catch((err) => console.log('err: ', err))
+}
+
 
 function getEmptyBook(
   id = '',

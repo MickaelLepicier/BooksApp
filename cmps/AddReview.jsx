@@ -1,6 +1,8 @@
+import { updateRating } from "../services/util.service.js"
+
 const { useState, useEffect, useRef } = React
 
-export function AddReview({ saveReview }) {
+export function AddReview({ saveReview,onClose }) {
   const [review, setReview] = useState({})
   const starsRef = useRef()
 
@@ -19,20 +21,27 @@ export function AddReview({ saveReview }) {
     setReview((prevReview) => ({ ...prevReview, [field]: value }))
   }
 
-  function updateRating(rate) {
-    const stars = starsRef.current.querySelectorAll('i')
-    // console.log('stars: ',stars)
-
-    stars.forEach((star, idx)=>{
-      if(rate >= idx + 1 ) star.classList.add('active')
-        else star.classList.remove('active')
-    })
-
+  function updateStar(rate) {
+    updateRating(starsRef,rate)
     setReview((prevReview) => ({ ...prevReview, ['rating']: rate }))
+  }
+
+// TODO create a comp of AddReview and use it to add a review
+
+  // function updateRating(starsRef,rate) {
+  //   const stars = starsRef.current.querySelectorAll('i')
+  //   // console.log('stars: ',stars)
+
+  //   stars.forEach((star, idx)=>{
+  //     if(rate >= idx + 1 ) star.classList.add('active')
+  //       else star.classList.remove('active')
+  //   })
+  
+    // setReview((prevReview) => ({ ...prevReview, ['rating']: rate }))
 
     // add active to the class of the stars
     // call updateReview(rate) - the rate is in an array
-  }
+  // }
 
   // when I save the review in the service
 
@@ -55,11 +64,11 @@ export function AddReview({ saveReview }) {
         <div className="form-group">
           <label htmlFor="rating">Rating:</label>
           <section className="stars" ref={starsRef}>
-            <i onClick={() => updateRating(1)} className="fa-solid fa-star"></i>
-            <i onClick={() => updateRating(2)} className="fa-solid fa-star"></i>
-            <i onClick={() => updateRating(3)} className="fa-solid fa-star"></i>
-            <i onClick={() => updateRating(4)} className="fa-solid fa-star"></i>
-            <i onClick={() => updateRating(5)} className="fa-solid fa-star"></i>
+            <i onClick={() => updateStar(1)} className="fa-solid fa-star"></i>
+            <i onClick={() => updateStar(2)} className="fa-solid fa-star"></i>
+            <i onClick={() => updateStar(3)} className="fa-solid fa-star"></i>
+            <i onClick={() => updateStar(4)} className="fa-solid fa-star"></i>
+            <i onClick={() => updateStar(5)} className="fa-solid fa-star"></i>
           </section>
 
           {/* <input
@@ -85,6 +94,7 @@ export function AddReview({ saveReview }) {
           />
         </div>
         <button>Submit</button>
+        <button type="button" onClick={onClose}>Close</button>
       </form>
     </section>
   )
