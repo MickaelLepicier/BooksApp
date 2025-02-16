@@ -5,3 +5,25 @@
   align-items: center;
   list-style-type: none;
 }
+
+
+.review-details {
+  position: relative;
+  border: 2px solid #a1a1a1;
+  border-radius: 10px;
+  margin-block-start: 10px;
+  padding: 10px;
+  line-height: 1.5;
+  font-size: 1.3rem;
+}
+
+.review-details h5 {
+  color: #a1a1a1;
+}
+
+
+.review-details p {
+  max-width: 90%;
+  margin: 0;
+  word-wrap: break-word;
+}

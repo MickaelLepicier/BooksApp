@@ -1,6 +1,5 @@
 import { loadFromStorage, saveToStorage } from './storage.service.js'
 import { booksData } from '../assets/data/books.js'
-import { makeId } from './util.service.js'
 
 export const bookService = {
   query,
@@ -9,8 +8,6 @@ export const bookService = {
   put,
   remove,
   save,
-  addReview,
-  removeReview,
   getEmptyBook,
   getDefaultFilter
 }
@@ -81,27 +78,6 @@ function save(book) {
   }
 }
 
-function addReview(bookId, review) {
-  review.id = makeId()
-  return get(bookId)
-    .then((book) => {
-      book.reviews.push(review)
-      // console.log('book review: ', book)
-      save(book)
-      return book
-    })
-    .catch((err) => console.log('err: ', err))
-}
-
-function removeReview(bookId, updatedReviews) {
-  return get(bookId)
-    .then((book) => {
-      book.reviews = updatedReviews
-      save(book)
-      return book
-    })
-    .catch((err) => console.log('err: ', err))
-}
 
 function getEmptyBook(
   id = '',
@@ -150,15 +126,16 @@ function _createBook(book, idx) {
   return newBook
 }
 
-function _setNextPrevBookId(book){
-  return storageService.query(BOOK_KEY)
-  .then((books) => {
-      const bookIdx = books.findIndex((currBook) => currBook.id === book.id)
-      const nextBook = books[bookIdx + 1] ? books[bookIdx + 1] : books[0]
-      const prevBook = books[bookIdx - 1] ? books[bookIdx - 1] : books[books.length - 1]
-      book.nextBookId = nextBook.id
-      book.prevBookId = prevBook.id
-      return book
+function _setNextPrevBookId(book) {
+  return storageService.query(BOOK_KEY).then((books) => {
+    const bookIdx = books.findIndex((currBook) => currBook.id === book.id)
+    const nextBook = books[bookIdx + 1] ? books[bookIdx + 1] : books[0]
+    const prevBook = books[bookIdx - 1]
+      ? books[bookIdx - 1]
+      : books[books.length - 1]
+    book.nextBookId = nextBook.id
+    book.prevBookId = prevBook.id
+    return book
   })
 }
 

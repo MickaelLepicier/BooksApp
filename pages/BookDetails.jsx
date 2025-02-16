@@ -9,10 +9,11 @@ import { getCurrencySymbol } from '../services/util.service.js'
 import { AddReview } from '../cmps/AddReview.jsx'
 import { ReviewList } from '../cmps/ReviewList.jsx'
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
+import { reviewService } from '../services/review.service.js'
 
 export function BookDetails() {
   const [book, setBook] = useState(null)
-  const [IsAddReview, setIsAddReview] = useState(false)
+  const [isShowAddReview, setIsShowAddReview] = useState(false)
 
   const params = useParams() // the bookId is inside this hook
   const navigate = useNavigate()
@@ -27,8 +28,8 @@ export function BookDetails() {
 
   useEffect(() => {
     if (book && priceRef.current) {
-      priceRef.current.style.color = price > 150 ? 'red' : 'green'
-      ribbonRef.current.hidden = isOnSale ? false : true
+      priceRef.current.style.color = book.price > 150 ? 'red' : 'green'
+      ribbonRef.current.hidden = book.isOnSale ? false : true
     }
   }, [book])
 
@@ -43,97 +44,84 @@ export function BookDetails() {
       })
   }
 
-  function getPageCountMsg(pageCount) {
-    if (!pageCount) return ''
+  function getPageCountMsg() {
+    if (!book.pageCount) return ''
 
     let msg = 'Light Reading'
-    if (pageCount > 500) msg = 'Serious Reading'
-    else if (pageCount > 200) msg = 'Descent Reading'
-    // else if(pageCount < 100) msg = 'Light Reading'
+    if (book.pageCount > 500) msg = 'Serious Reading'
+    else if (book.pageCount > 200) msg = 'Descent Reading'
+
     return `(${msg})`
   }
 
-  function getPublishedDateMsg(publishedDate) {
-    if (!publishedDate) return ''
+  function getPublishedDateMsg() {
+    if (!book.publishedDate) return ''
 
-    const date = new Date()
-    const currYear = date.getFullYear()
-    const diff = currYear - publishedDate
+    const currDate = new Date()
+    const currYear = currDate.getFullYear()
+    const diff = currYear - book.publishedDate
 
     return diff >= 10 ? '(Vintage)' : '(New)'
   }
 
-  function getLanguage(lng) {
+  function getLanguage() {
     const lngMap = {
       he: 'Hebrew',
       sp: 'Spanish',
       en: 'English'
     }
 
-    return lngMap[lng]
+    return lngMap[book.language]
   }
 
-  function saveReview(review) {
+  function onSaveReview(review) {
     // save the review and set the book
-
-    bookService
+    reviewService
       .addReview(params.bookId, review)
       .then((book) => {
         console.log('book: ', book)
-        setBook(book)
+        // setBook(book)
+        setBook((prevBook) => {
+          const reviews = [review, ...prevBook.reviews]
+          return { ...prevBook, reviews }
+        })
       })
       .catch((err) => console.log('err: ', err))
   }
 
-  function onRemove(reviewId) {
-    const updatedReviews = reviews.filter((review) => review.id !== reviewId)
-    setBook((prevBook) => ({ ...prevBook, reviews: updatedReviews }))
+  function onRemoveReview(reviewId) {
+    // const updatedReviews = book.reviews.filter(
+    //   (review) => review.id !== reviewId
+    // )
+    // setBook((prevBook) => ({ ...prevBook, reviews: updatedReviews }))
 
-    bookService.removeReview(params.bookId, updatedReviews)
+    // reviewService.removeReview(params.bookId, updatedReviews)
+    
+    reviewService.removeReview(params.bookId, reviewId).then(() => {
+      setBook((prevBook) => {
+        const filteredReviews = prevBook.reviews.filter(
+          (review) => review.id !== reviewId
+        )
+        return { ...prevBook, reviews: filteredReviews }
+      })
+    })
   }
 
-  function onClose() {
-    setIsAddReview(false)
+  function onToggleAddReview() {
+    setIsShowAddReview((prevReview) => !prevReview)
   }
 
   if (!book) return 'Loading...'
-  console.log('book: ', book)
-
-  const {
-    title,
-    price,
-    authors,
-    currencyCode,
-    language,
-    pageCount,
-    publishedDate,
-    description,
-    reviews,
-    isOnSale,
-    nextBookId,
-    prevBookId,
-    thumbnail,
-    imgSrc
-  } = book
-
-  const pageCountMsg = getPageCountMsg(pageCount)
-  const publishedDateMsg = getPublishedDateMsg(publishedDate)
-  const currencySymbol = getCurrencySymbol(currencyCode)
-  const bookLanguage = getLanguage(language)
-
-  // TODO Create reviewList & reviewPreview
-
-  // TODO later on create more comps for shorter code
-
-  // Put const { Routes, Route } = ReactRouterDOM in <AddReview>
-  // Show modal with: fullname, rating, readAt
-  // render a list of the reviews
-  // CSS make the .book-details-container as grid
+  // console.log('book: ', book)
 
   return (
     <section className="book-details-container">
       <section className="book-img-wrapper">
-        <img ref={imgRef} src={thumbnail || imgSrc} alt="book-image" />
+        <img
+          ref={imgRef}
+          src={book.thumbnail || book.imgSrc}
+          alt="book-image"
+        />
         <div className="ribbon" ref={ribbonRef} hidden>
           <span>On Sale!</span>
         </div>
@@ -141,67 +129,76 @@ export function BookDetails() {
 
       <section className="book-info">
         <h2>
-          <span>Title:</span> {title}
+          <span>Title:</span> {book.title}
         </h2>
-        {authors && (
+        {book.authors && (
           <p>
             <span>Author: </span>
-            {authors}
+            {book.authors}
           </p>
         )}
-        {publishedDate && (
+        {book.publishedDate && (
           <p>
             <span>Published Date: </span>
-            {publishedDate} {publishedDateMsg}
+            {book.publishedDate} {getPublishedDateMsg()}
           </p>
         )}
-        {language && (
+        {book.language && (
           <p>
-            <span>Language: </span> {bookLanguage}
+            <span>Language: </span> {getLanguage()}
           </p>
         )}
-        {pageCount && (
+        {book.pageCount && (
           <p>
-            <span>Pages:</span> {pageCount} {pageCountMsg}
+            <span>Pages:</span> {book.pageCount} {getPageCountMsg()}
           </p>
         )}
         <p>
           <span>Price: </span>
           <span ref={priceRef}>
-            {price}
-            {currencySymbol}
+            {book.price}
+            {getCurrencySymbol(book.currencyCode)}
           </span>
         </p>
-        {description && (
+        {book.description && (
           <p>
             <span>Description:</span>
-            <LongText description={description} />
+            <LongText description={book.description} />
           </p>
         )}
       </section>
       <section className="btns-actions">
-
         <Link to={`/book/${book.prevBookId}`}>
-        <button><i className='fa-solid fa-arrow-left'/></button>
+          <button>
+            <i className="fa-solid fa-arrow-left" />
+          </button>
         </Link>
 
         <Link to={`/book/edit/${book.id}`}>
           <button>Edit</button>
         </Link>
 
-        <button onClick={() => setIsAddReview(true)}>Add Reviews</button>
+        <button onClick={onToggleAddReview}>Add Reviews</button>
 
         <Link to="/book">
           <button>Close</button>
         </Link>
 
         <Link to={`/book/${book.nextBookId}`}>
-        <button><i className='fa-solid fa-arrow-right'/></button>
+          <button>
+            <i className="fa-solid fa-arrow-right" />
+          </button>
         </Link>
       </section>
-      <ReviewList reviews={reviews} onRemove={onRemove} />
-      {/* TODO in modal */}
-      {IsAddReview && <AddReview saveReview={saveReview} onClose={onClose} />}
+
+      <ReviewList reviews={book.reviews} onRemoveReview={onRemoveReview} />
+
+      {isShowAddReview && (
+        <AddReview
+          onSaveReview={onSaveReview}
+          onToggleAddReview={onToggleAddReview}
+        />
+      )}
     </section>
   )
 }

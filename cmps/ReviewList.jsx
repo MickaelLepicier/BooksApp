@@ -1,10 +1,6 @@
 import { ReviewPreview } from './ReviewPreview.jsx'
 
-export function ReviewList({ reviews,onRemove }) {
-  console.log('reviews: ', reviews)
-
-
-
+export function ReviewList({ reviews, onRemoveReview }) {
 
   if (!reviews) return 'Loading...'
 
@@ -14,7 +10,11 @@ export function ReviewList({ reviews,onRemove }) {
       <ul className="reviews">
         {!reviews.length && <li>There are no reviews</li>}
         {reviews.map((review) => (
-          <ReviewPreview key={review.id} review={review} onRemove={onRemove} />
+          <ReviewPreview
+            key={review.id}
+            review={review}
+            onRemoveReview={onRemoveReview}
+          />
         ))}
       </ul>
     </section>
