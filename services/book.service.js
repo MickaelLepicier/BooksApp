@@ -58,7 +58,7 @@ function query(filterBy = {}) {
 }
 
 function get(bookId) {
-  return storageService.get(BOOK_KEY, bookId)
+  return storageService.get(BOOK_KEY, bookId).then(_setNextPrevBookId)
 }
 
 function post(newEntity) {
@@ -93,16 +93,15 @@ function addReview(bookId, review) {
     .catch((err) => console.log('err: ', err))
 }
 
-function removeReview(bookId, updatedReviews){
+function removeReview(bookId, updatedReviews) {
   return get(bookId)
-  .then((book) => {
-    book.reviews = updatedReviews
-    save(book)
-    return book
-  })
-  .catch((err) => console.log('err: ', err))
+    .then((book) => {
+      book.reviews = updatedReviews
+      save(book)
+      return book
+    })
+    .catch((err) => console.log('err: ', err))
 }
-
 
 function getEmptyBook(
   id = '',
@@ -149,6 +148,18 @@ function _createBook(book, idx) {
   // console.log('newBook: ',newBook);
 
   return newBook
+}
+
+function _setNextPrevBookId(book){
+  return storageService.query(BOOK_KEY)
+  .then((books) => {
+      const bookIdx = books.findIndex((currBook) => currBook.id === book.id)
+      const nextBook = books[bookIdx + 1] ? books[bookIdx + 1] : books[0]
+      const prevBook = books[bookIdx - 1] ? books[bookIdx - 1] : books[books.length - 1]
+      book.nextBookId = nextBook.id
+      book.prevBookId = prevBook.id
+      return book
+  })
 }
 
 /*

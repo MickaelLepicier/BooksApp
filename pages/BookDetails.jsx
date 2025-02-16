@@ -1,18 +1,21 @@
+const { useState, useEffect, useRef } = React
+
+const { useParams, useNavigate } = ReactRouter
+const { Link } = ReactRouterDOM
+
 import { bookService } from '../services/book.service.js'
 import { LongText } from '../cmps/LongText.jsx'
 import { getCurrencySymbol } from '../services/util.service.js'
 import { AddReview } from '../cmps/AddReview.jsx'
 import { ReviewList } from '../cmps/ReviewList.jsx'
-
-const { useState, useEffect, useRef } = React
-
-const { useParams, useNavigation, Link } = ReactRouterDOM
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
 export function BookDetails() {
   const [book, setBook] = useState(null)
   const [IsAddReview, setIsAddReview] = useState(false)
 
   const params = useParams() // the bookId is inside this hook
+  const navigate = useNavigate()
 
   const imgRef = useRef()
   const ribbonRef = useRef()
@@ -32,8 +35,12 @@ export function BookDetails() {
   function loadBook() {
     bookService
       .get(params.bookId)
-      .then((book) => setBook(book))
-      .catch((err) => console.error(`Did not find the book: ${err}`))
+      .then(setBook)
+      .catch((err) => {
+        console.error(`Did not find the book: ${err}`)
+        showErrorMsg('Could not get the book...')
+        navigate('/book')
+      })
   }
 
   function getPageCountMsg(pageCount) {
@@ -90,7 +97,7 @@ export function BookDetails() {
   }
 
   if (!book) return 'Loading...'
-  // console.log('book: ', book)
+  console.log('book: ', book)
 
   const {
     title,
@@ -103,6 +110,8 @@ export function BookDetails() {
     description,
     reviews,
     isOnSale,
+    nextBookId,
+    prevBookId,
     thumbnail,
     imgSrc
   } = book
@@ -171,13 +180,24 @@ export function BookDetails() {
         )}
       </section>
       <section className="btns-actions">
-        <button>
-          <Link to={`/book/edit/${book.id}`}> Edit </Link>
-        </button>
+
+        <Link to={`/book/${book.prevBookId}`}>
+        <button><i className='fa-solid fa-arrow-left'/></button>
+        </Link>
+
+        <Link to={`/book/edit/${book.id}`}>
+          <button>Edit</button>
+        </Link>
+
         <button onClick={() => setIsAddReview(true)}>Add Reviews</button>
-        <button>
-          <Link to="/book"> Close </Link>
-        </button>
+
+        <Link to="/book">
+          <button>Close</button>
+        </Link>
+
+        <Link to={`/book/${book.nextBookId}`}>
+        <button><i className='fa-solid fa-arrow-right'/></button>
+        </Link>
       </section>
       <ReviewList reviews={reviews} onRemove={onRemove} />
       {/* TODO in modal */}

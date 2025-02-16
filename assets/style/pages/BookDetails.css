@@ -2,7 +2,7 @@
   /* display: flex; */
 
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 300px, 1fr);
   grid-template-areas:
     'img info'
     'btns btns'

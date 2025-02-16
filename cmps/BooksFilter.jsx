@@ -1,17 +1,23 @@
-const { useState, useEffect } = React
+import { debounce } from '../services/util.service.js'
+
+const { useState, useEffect, useRef } = React
 
 export function BooksFilter({ filterBy, onSetFilter }) {
   const [booksFilter, setBooksFilter] = useState({ ...filterBy })
+  const onSetFilterDebounce = useRef(debounce(onSetFilter, 500))
 
   useEffect(() => {
-    let timeOutId = setTimeout(() => {
-      onSetFilter(booksFilter)
-    }, 500)
+    onSetFilterDebounce.current(booksFilter)
 
-    return () => clearTimeout(timeOutId)
+    // Another way:
+    // let timeOutId = setTimeout(() => {
+    //   onSetFilter(booksFilter)
+    // }, 500)
+
+    // return () => clearTimeout(timeOutId)
   }, [booksFilter])
 
-  function updateFilter(ev) {
+  function handleChange(ev) {
     let { type, name: field, value } = ev.target
 
     if (type === 'number') value = +value
@@ -30,14 +36,14 @@ export function BooksFilter({ filterBy, onSetFilter }) {
           type="text"
           name="title"
           value={booksFilter.title || ''}
-          onChange={updateFilter}
+          onChange={handleChange}
           placeholder="Search by title"
         />
         <input
           type="number"
           name="price"
           value={booksFilter.price || ''}
-          onChange={updateFilter}
+          onChange={handleChange}
           placeholder="Search by price"
         />
 
@@ -45,14 +51,14 @@ export function BooksFilter({ filterBy, onSetFilter }) {
           type="number"
           name="publishedDate"
           value={booksFilter.publishedDate || ''}
-          onChange={updateFilter}
+          onChange={handleChange}
           placeholder="Search by published year"
         />
         <input
           type="number"
           name="pageCount"
           value={booksFilter.pageCount || ''}
-          onChange={updateFilter}
+          onChange={handleChange}
           placeholder="Search by number of pages"
         />
       </form>
