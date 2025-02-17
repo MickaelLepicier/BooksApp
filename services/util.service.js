@@ -96,7 +96,6 @@ export function getCurrencySymbol(currencyCode) {
 
   //     default: return '$'
   // }
-
   const currencyMap = {
     EUR: '€',
     ILS: '₪',

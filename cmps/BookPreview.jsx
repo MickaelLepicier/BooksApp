@@ -1,17 +1,16 @@
 import { getCurrencySymbol } from "../services/util.service.js"
 
 export function BookPreview({ book }) {
-  const { title, price, currencyCode, thumbnail, imgSrc } = book
+  const { title, listPrice, thumbnail } = book
 
-  const currencySymbol = getCurrencySymbol(currencyCode)
+  const currencySymbol = getCurrencySymbol(listPrice.currencyCode)
 
   
-
   return (
     <React.Fragment>
-      <img src={thumbnail || imgSrc} alt="book-image" />
+      <img src={thumbnail } alt="book-image" />
       <h2>{title}</h2>
-      <p>{price} {currencySymbol}</p>
+      <p>{listPrice.amount} {currencySymbol}</p>
     </React.Fragment>
   )
 }

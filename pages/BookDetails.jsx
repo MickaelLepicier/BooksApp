@@ -8,14 +8,14 @@ import { LongText } from '../cmps/LongText.jsx'
 import { getCurrencySymbol } from '../services/util.service.js'
 import { AddReview } from '../cmps/AddReview.jsx'
 import { ReviewList } from '../cmps/ReviewList.jsx'
-import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
+import { showErrorMsg } from '../services/event-bus.service.js'
 import { reviewService } from '../services/review.service.js'
 
 export function BookDetails() {
   const [book, setBook] = useState(null)
   const [isShowAddReview, setIsShowAddReview] = useState(false)
 
-  const params = useParams() // the bookId is inside this hook
+  const params = useParams()
   const navigate = useNavigate()
 
   const imgRef = useRef()
@@ -75,7 +75,7 @@ export function BookDetails() {
   }
 
   function onSaveReview(review) {
-    // save the review and set the book
+    // console.log('review: ', review)
     reviewService
       .addReview(params.bookId, review)
       .then((book) => {
@@ -90,13 +90,6 @@ export function BookDetails() {
   }
 
   function onRemoveReview(reviewId) {
-    // const updatedReviews = book.reviews.filter(
-    //   (review) => review.id !== reviewId
-    // )
-    // setBook((prevBook) => ({ ...prevBook, reviews: updatedReviews }))
-
-    // reviewService.removeReview(params.bookId, updatedReviews)
-    
     reviewService.removeReview(params.bookId, reviewId).then(() => {
       setBook((prevBook) => {
         const filteredReviews = prevBook.reviews.filter(
@@ -203,14 +196,3 @@ export function BookDetails() {
   )
 }
 
-/*
-
-              <button name="edit" onClick={() => setIsEdit(true)}>
-                 Edit
-              </button>
-        
-              <button name="close" onClick={() => setSelectedBookId(null)}>
-                 Close
-              </button>
-          
-          */

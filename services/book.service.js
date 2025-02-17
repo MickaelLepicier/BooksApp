@@ -1,5 +1,14 @@
 import { loadFromStorage, saveToStorage } from './storage.service.js'
 import { booksData } from '../assets/data/books.js'
+import { makeId, makeLorem, getRandomIntInclusive } from './util.service.js'
+// import axios from 'axios'
+
+const BOOK_KEY = 'bookDB'
+
+const CACHE_STORAGE_KEY = 'googleBooksCache'
+const gCache = loadFromStorage(CACHE_STORAGE_KEY) || {}
+
+_createBooks()
 
 export const bookService = {
   query,
@@ -8,15 +17,13 @@ export const bookService = {
   put,
   remove,
   save,
+  getGoogleBooks,
+  addGoogleBook,
   getEmptyBook,
   getDefaultFilter
 }
 
 window.bs = bookService
-
-const BOOK_KEY = 'bookDB'
-
-_createBooks()
 
 function query(filterBy = {}) {
   return storageService.query(BOOK_KEY).then((books) => {
@@ -78,18 +85,88 @@ function save(book) {
   }
 }
 
+function addGoogleBook(book) {
+  return storageService.post(BOOK_KEY, book, false)
+}
+
+
+function getGoogleBooks(bookName) {
+  if (bookName === '') return Promise.resolve()
+  const googleBooks = gCache[bookName]
+
+  if (googleBooks) {
+    console.log('data from storage...: ', googleBooks)
+    return Promise.resolve(googleBooks)
+  }
+
+  const url = `https://www.googleapis.com/books/v1/volumes?printType=books&q=${bookName}`
+  return axios.get(url).then((res) => {
+    const data = res.data.items
+    console.log('data from network... ', data)
+    const books = _formatGoogleBooks(data)
+    saveToStorage(CACHE_STORAGE_KEY, gCache)
+    return books
+  })
+}
+
+function _formatGoogleBooks(googleBooks) {
+  return googleBooks.map((googleBook) => {
+    const { volumeInfo } = googleBook
+    const book = {
+      id: googleBook.id,
+      title: volumeInfo.title,
+      description: volumeInfo.description,
+      pageCount: volumeInfo.pageCount,
+      authors: volumeInfo.authors,
+      categories: volumeInfo.categories,
+      publishedDate: volumeInfo.publishedDate,
+      language: volumeInfo.language,
+      listPrice: {
+        amount: utilService.getRandomIntInclusive(80, 500),
+        currencyCode: 'EUR',
+        isOnSale: Math.random() > 0.7
+      },
+      reviews: []
+    }
+    if (volumeInfo.imageLinks) book.thumbnail = volumeInfo.imageLinks.thumbnail
+    return book
+  })
+}
+
+// function getEmptyBook(
+//   id = '',
+//   title = '',
+//   listPrice = '',
+//   publishedDate = '',
+//   pageCount = '',
+//   currencyCode = '$'
+// ) {
+
+//   return { id, title, listPrice, publishedDate, pageCount, currencyCode }
+// }
 
 function getEmptyBook(
-  id = '',
   title = '',
-  listPrice = '',
-  publishedDate = '',
+  amount = '',
+  description = '',
   pageCount = '',
-  currencyCode = '$'
+  language = 'en',
+  authors = ''
 ) {
-  // TODO check at the end if I call this function with props
-  // if not so I can return without the props
-  return { id, title, listPrice, publishedDate, pageCount, currencyCode }
+  return {
+    title,
+    authors,
+    description,
+    pageCount,
+    thumbnail: `/assets/img/15.jpg`,
+    language,
+    listPrice: {
+      amount,
+      currencyCode: 'EUR',
+      isOnSale: Math.random() > 0.7
+    },
+    reviews: []
+  }
 }
 
 function getDefaultFilter() {
@@ -97,34 +174,65 @@ function getDefaultFilter() {
 }
 
 function _createBooks() {
-  let books = loadFromStorage(BOOK_KEY)
-  if (!books || !books.length) {
-    books = booksData.map((book, idx) => _createBook(book, idx))
+  const ctgs = ['Love', 'Fiction', 'Poetry', 'Computers', 'Religion']
+  const crncy = ['EUR','USD','ILS']
+  const books = loadFromStorage(BOOK_KEY) || []
+
+  if (books && books.length) return
+
+  for (let i = 0; i < 20; i++) {
+    const book = {
+      id: makeId(),
+      title: makeLorem(2),
+      subtitle: makeLorem(4),
+      authors: [makeLorem(1)],
+      publishedDate: getRandomIntInclusive(1950, 2024),
+      description: makeLorem(20),
+      pageCount: getRandomIntInclusive(20, 600),
+      categories: [ctgs[getRandomIntInclusive(0, ctgs.length - 1)]],
+      thumbnail: `/assets/img/${i + 1}.jpg`,
+      language: 'en',
+      listPrice: {
+        amount: getRandomIntInclusive(80, 500),
+        currencyCode: [crncy[getRandomIntInclusive(0, crncy.length - 1)]],
+        isOnSale: Math.random() > 0.7
+      },
+      reviews: []
+    }
+    books.push(book)
   }
   saveToStorage(BOOK_KEY, books)
 }
 
-function _createBook(book, idx) {
-  // console.log('book: ', book.authors.join(', '))
-  let newBook = {
-    id: book.id,
-    title: book.title,
-    price: book.listPrice.amount,
-    authors: book.authors.join(', '),
-    language: book.language,
-    description: book.description,
-    reviews: [],
-    publishedDate: book.publishedDate,
-    pageCount: book.pageCount,
-    isOnSale: book.listPrice.isOnSale,
-    currencyCode: book.listPrice.currencyCode,
-    thumbnail: book.thumbnail,
-    imgSrc: `../assets/img/${idx + 1}.jpg`
-  }
-  // console.log('newBook: ',newBook);
+// function _createBooks() {
+//   let books = loadFromStorage(BOOK_KEY)
+//   if (!books || !books.length) {
+//     books = booksData.map((book, idx) => _createBook(book, idx))
+//   }
+//   saveToStorage(BOOK_KEY, books)
+// }
 
-  return newBook
-}
+// function _createBook(book, idx) {
+//   // console.log('book: ', book.authors.join(', '))
+//   let newBook = {
+//     id: book.id,
+//     title: book.title,
+//     price: book.listPrice.amount,
+//     authors: book.authors.join(', '),
+//     language: book.language,
+//     description: book.description,
+//     reviews: [],
+//     publishedDate: book.publishedDate,
+//     pageCount: book.pageCount,
+//     isOnSale: book.listPrice.isOnSale,
+//     currencyCode: book.listPrice.currencyCode,
+//     thumbnail: book.thumbnail,
+//     imgSrc: `../assets/img/${idx + 1}.jpg`
+//   }
+//   // console.log('newBook: ',newBook);
+
+//   return newBook
+// }
 
 function _setNextPrevBookId(book) {
   return storageService.query(BOOK_KEY).then((books) => {
