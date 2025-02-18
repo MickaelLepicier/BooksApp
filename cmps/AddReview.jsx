@@ -1,10 +1,10 @@
-const { useState, useRef } = React
+const { useState } = React
 
 import { reviewService } from '../services/review.service.js'
+import { RateBySelect } from './RateBySelect.jsx'
 
 export function AddReview({ onSaveReview, onToggleAddReview }) {
   const [reviewToAdd, setReviewToAdd] = useState(reviewService.getEmptyReview())
-  const starsRef = useRef()
 
   function onSubmit(ev) {
     ev.preventDefault()
@@ -21,19 +21,7 @@ export function AddReview({ onSaveReview, onToggleAddReview }) {
     setReviewToAdd((prevReview) => ({ ...prevReview, [field]: value }))
   }
 
-  function updateStar(rate) {
-    updateRating(starsRef, rate)
-    setReviewToAdd((prevReview) => ({ ...prevReview, ['rating']: rate }))
-  }
 
-  function updateRating(starsRef, rate) {
-    const stars = starsRef.current.querySelectorAll('i')
-
-    stars.forEach((star, idx) => {
-      if (rate >= idx + 1) star.classList.add('active')
-      else star.classList.remove('active')
-    })
-  }
 
   const { fullName, date, txt } = reviewToAdd
   return (
@@ -57,10 +45,29 @@ export function AddReview({ onSaveReview, onToggleAddReview }) {
           </div>
           <div className="form-group">
             <label htmlFor="rating">Rating:</label>
-            <section className="stars" ref={starsRef}>
-              {reviewService.renderRating(reviewToAdd.rating, updateStar)}
-            </section>
+
+            <RateBySelect reviewToAdd={reviewToAdd} setReviewToAdd={setReviewToAdd}/>
+
+         
           </div>
+
+            {/*
+
+TODO make it dynamic comp
+
+Dynamic Components
+• Support 3 different ways of rating a book using 3 types of dynamic
+components which receive a val prop and fire a selected event
+- <RateBySelect>
+- <RateByTextbox>
+- <RateByStars>
+Let the user choose his preferred way of rating by using radio buttons.
+          
+            <RateBySelect>
+            <RateByTextbox>
+            <RateByStars></RateByStars>
+
+            */}
 
           <div className="form-group">
             <label htmlFor="date">Date:</label>
