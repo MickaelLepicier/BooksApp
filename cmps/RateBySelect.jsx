@@ -1,28 +1,17 @@
 import { reviewService } from "../services/review.service.js"
 
-const {useRef} = React
+// const {useRef} = React
 
-export function RateBySelect({reviewToAdd, setReviewToAdd}) {
-
-  const starsRef = useRef()
-
-  function updateStar(rate) {
-    updateRating(starsRef, rate)
-    setReviewToAdd((prevReview) => ({ ...prevReview, ['rating']: rate }))
-  }
-
-  function updateRating(starsRef, rate) {
-    const stars = starsRef.current.querySelectorAll('i')
-
-    stars.forEach((star, idx) => {
-      if (rate >= idx + 1) star.classList.add('active')
-      else star.classList.remove('active')
-    })
-  }
+export function RateBySelect({review, handleChange}) {
+// console.log('reviewToAdd: ',reviewToAdd);
 
   return (
-    <section className="stars" ref={starsRef}>
-      {reviewService.renderRating(reviewToAdd.rating, updateStar)}
-    </section>
+    <select value={review} onChange={handleChange} name='rating'>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+</select>
   )
 }

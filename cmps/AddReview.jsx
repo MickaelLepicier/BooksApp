@@ -1,10 +1,12 @@
 const { useState } = React
 
 import { reviewService } from '../services/review.service.js'
-import { RateBySelect } from './RateBySelect.jsx'
+import { Rating } from './Rating.jsx'
 
 export function AddReview({ onSaveReview, onToggleAddReview }) {
   const [reviewToAdd, setReviewToAdd] = useState(reviewService.getEmptyReview())
+  const [cmpType, setCmpType] = useState('stars')
+
 
   function onSubmit(ev) {
     ev.preventDefault()
@@ -14,14 +16,17 @@ export function AddReview({ onSaveReview, onToggleAddReview }) {
     onToggleAddReview()
   }
 
-  function handleChange(ev) {
-    let { type, name: field, value } = ev.target
+  function handleChange({target}) {
+    let { type, name: field, value } = target
 
     if (type === 'number') value = +value
     setReviewToAdd((prevReview) => ({ ...prevReview, [field]: value }))
   }
 
-
+function onChangeCmpType({target}){
+  const selectedType = target.value
+  setCmpType(selectedType)
+}
 
   const { fullName, date, txt } = reviewToAdd
   return (
@@ -44,30 +49,24 @@ export function AddReview({ onSaveReview, onToggleAddReview }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="rating">Rating:</label>
+            {/* <label htmlFor="rating">Rating:</label> */}
 
-            <RateBySelect reviewToAdd={reviewToAdd} setReviewToAdd={setReviewToAdd}/>
+          <div className='rate-by-choise'>
+            <p className='bold-txt'>Select rating type:</p>
 
-         
+            <label htmlFor="select">Select</label>
+            <input type="radio" name='rating' id='select' onChange={onChangeCmpType} value='select'/>
+           
+            <label htmlFor="numInput">Number Input</label>
+            <input type="radio" name='rating' id='numInput' onChange={onChangeCmpType} value='numInput'/>
+          
+            <label htmlFor="stars">Stars</label>
+            <input type="radio" name='rating' id='stars' onChange={onChangeCmpType} value='stars'/>
           </div>
 
-            {/*
-
-TODO make it dynamic comp
-
-Dynamic Components
-• Support 3 different ways of rating a book using 3 types of dynamic
-components which receive a val prop and fire a selected event
-- <RateBySelect>
-- <RateByTextbox>
-- <RateByStars>
-Let the user choose his preferred way of rating by using radio buttons.
-          
-            <RateBySelect>
-            <RateByTextbox>
-            <RateByStars></RateByStars>
-
-            */}
+            <Rating cmpType={cmpType} rating={reviewToAdd.rating} handleChange={handleChange} />
+         
+          </div>
 
           <div className="form-group">
             <label htmlFor="date">Date:</label>
@@ -97,3 +96,5 @@ Let the user choose his preferred way of rating by using radio buttons.
     </section>
   )
 }
+
+
