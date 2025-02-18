@@ -20,7 +20,8 @@ export const bookService = {
   getGoogleBooks,
   addGoogleBook,
   getEmptyBook,
-  getDefaultFilter
+  getDefaultFilter,
+  getFilterFromSearchParams
 }
 
 window.bs = bookService
@@ -40,9 +41,9 @@ function query(filterBy = {}) {
       filteredBooks = filteredBooks.filter((book) => regExp.test(book.title))
     }
 
-    if (filterBy.price) {
+    if (filterBy.amount) {
       filteredBooks = filteredBooks.filter(
-        (book) => book.price >= filterBy.price
+        (book) => book.listPrice.amount >= filterBy.amount
       )
     }
 
@@ -170,7 +171,18 @@ function getEmptyBook(
 }
 
 function getDefaultFilter() {
-  return { title: '', listPrice: '', publishedDate: '', pageCount: '' }
+  return { title: '', amount: '', publishedDate: '', pageCount: '' }
+}
+
+function getFilterFromSearchParams(searchParams){
+
+  const title = searchParams.get('title') || ''
+  const amount = +searchParams.get('amount') || ''
+  const publishedDate = +searchParams.get('publishedDate') || ''
+  const pageCount = +searchParams.get('pageCount') || ''
+
+  return { title, amount, publishedDate, pageCount }
+
 }
 
 function _createBooks() {

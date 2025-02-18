@@ -3,6 +3,8 @@ import { debounce } from '../services/util.service.js'
 const { useState, useEffect, useRef } = React
 
 export function BooksFilter({ filterBy, onSetFilter }) {
+  
+  
   const [booksFilter, setBooksFilter] = useState({ ...filterBy })
   const onSetFilterDebounce = useRef(debounce(onSetFilter, 500))
 
@@ -41,8 +43,8 @@ export function BooksFilter({ filterBy, onSetFilter }) {
         />
         <input
           type="number"
-          name="price"
-          value={booksFilter.price || ''}
+          name="amount"
+          value={booksFilter.amount || ''}
           onChange={handleChange}
           placeholder="Search by price"
         />
