@@ -21,7 +21,8 @@ export const bookService = {
   addGoogleBook,
   getEmptyBook,
   getDefaultFilter,
-  getFilterFromSearchParams
+  getFilterFromSearchParams,
+  getCategories
 }
 
 window.bs = bookService
@@ -89,7 +90,6 @@ function save(book) {
 function addGoogleBook(book) {
   return storageService.post(BOOK_KEY, book, false)
 }
-
 
 function getGoogleBooks(bookName) {
   if (bookName === '') return Promise.resolve()
@@ -174,20 +174,42 @@ function getDefaultFilter() {
   return { title: '', amount: '', publishedDate: '', pageCount: '' }
 }
 
-function getFilterFromSearchParams(searchParams){
-
+function getFilterFromSearchParams(searchParams) {
   const title = searchParams.get('title') || ''
   const amount = +searchParams.get('amount') || ''
   const publishedDate = +searchParams.get('publishedDate') || ''
   const pageCount = +searchParams.get('pageCount') || ''
 
   return { title, amount, publishedDate, pageCount }
+}
 
+function getCategories() {
+ return query(BOOK_KEY).then((books) => {
+    const bookCountByCategories = _getBookCountByCategories(books)
+
+    const data = Object.keys(bookCountByCategories).map((category) => ({
+      title: category,
+      value: Math.round((bookCountByCategories[category] / books.length) * 100)
+    }))
+    console.log('data: ', data)
+    return data
+  })
+}
+
+function _getBookCountByCategories(books) {
+  const bookCountByCategories = books.reduce((map, book) => {
+    const category = book.categories[0]
+    if (!map[category]) map[category] = 0
+    map[category]++
+    return map
+    // console.log('book.categories: ',book.categories[0])
+  }, {})
+  return bookCountByCategories
 }
 
 function _createBooks() {
   const ctgs = ['Love', 'Fiction', 'Poetry', 'Computers', 'Religion']
-  const crncy = ['EUR','USD','ILS']
+  const crncy = ['EUR', 'USD', 'ILS']
   const books = loadFromStorage(BOOK_KEY) || []
 
   if (books && books.length) return

@@ -1,5 +1,3 @@
-// import { BookDetails } from './BookDetails.jsx'
-// import { BookEdit } from './BookEdit.jsx'
 import { BookList } from '../cmps/BookList.jsx'
 import { BooksFilter } from '../cmps/BooksFilter.jsx'
 import { bookService } from '../services/book.service.js'
