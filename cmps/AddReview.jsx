@@ -7,7 +7,6 @@ export function AddReview({ onSaveReview, onToggleAddReview }) {
   const [reviewToAdd, setReviewToAdd] = useState(reviewService.getEmptyReview())
   const [cmpType, setCmpType] = useState('stars')
 
-
   function onSubmit(ev) {
     ev.preventDefault()
 
@@ -16,17 +15,21 @@ export function AddReview({ onSaveReview, onToggleAddReview }) {
     onToggleAddReview()
   }
 
-  function handleChange({target}) {
+  function handleChange({ target }) {
     let { type, name: field, value } = target
 
-    if (type === 'number') value = +value
+    if (type === 'number' || type === 'select-one') {
+      value = +value
+    }
+    if (value >= 5) value = 5
+
     setReviewToAdd((prevReview) => ({ ...prevReview, [field]: value }))
   }
 
-function onChangeCmpType({target}){
-  const selectedType = target.value
-  setCmpType(selectedType)
-}
+  function onChangeCmpType({ target }) {
+    const selectedType = target.value
+    setCmpType(selectedType)
+  }
 
   const { fullName, date, txt } = reviewToAdd
   return (
@@ -48,24 +51,44 @@ function onChangeCmpType({target}){
               required
             />
           </div>
-          <div className="form-group">
-            {/* <label htmlFor="rating">Rating:</label> */}
 
-          <div className='rate-by-choise'>
-            <p className='bold-txt'>Select rating type:</p>
+          <div className="rate-by-choise">
+            <p className="bold-txt">Select rating type:</p>
 
             <label htmlFor="select">Select</label>
-            <input type="radio" name='rating' id='select' onChange={onChangeCmpType} value='select'/>
-           
-            <label htmlFor="numInput">Number Input</label>
-            <input type="radio" name='rating' id='numInput' onChange={onChangeCmpType} value='numInput'/>
-          
-            <label htmlFor="stars">Stars</label>
-            <input type="radio" name='rating' id='stars' onChange={onChangeCmpType} value='stars'/>
-          </div>
+            <input
+              type="radio"
+              name="rating"
+              id="select"
+              onChange={onChangeCmpType}
+              value="select"
+            />
 
-            <Rating cmpType={cmpType} rating={reviewToAdd.rating} handleChange={handleChange} />
-         
+            <label htmlFor="numInput">Number Input</label>
+            <input
+              type="radio"
+              name="rating"
+              id="numInput"
+              onChange={onChangeCmpType}
+              value="numInput"
+            />
+
+            <label htmlFor="stars">Stars</label>
+            <input
+              type="radio"
+              name="rating"
+              id="stars"
+              onChange={onChangeCmpType}
+              value="stars"
+            />
+
+            <div className='rating'>
+              <Rating
+                cmpType={cmpType}
+                rating={reviewToAdd.rating}
+                handleChange={handleChange}
+              />
+            </div>
           </div>
 
           <div className="form-group">
@@ -96,5 +119,3 @@ function onChangeCmpType({target}){
     </section>
   )
 }
-
-

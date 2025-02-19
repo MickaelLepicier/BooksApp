@@ -1,14 +1,19 @@
-import { reviewService } from "../services/review.service.js"
+import { reviewService } from '../services/review.service.js'
 
-const {useRef} = React
+const { useRef } = React
 
-export function RateByStars({rating, handleChange}) {
-
+export function RateByStars({ rating, handleChange }) {
   const starsRef = useRef()
 
   function updateStar(rate) {
+
+    const target = {
+      name: 'rating',
+      value: rate
+    }
+
     updateRating(starsRef, rate)
-    handleChange((prevReview) => ({ ...prevReview, ['rating']: rate }))
+    handleChange({target})
   }
 
   function updateRating(starsRef, rate) {

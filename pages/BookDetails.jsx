@@ -79,8 +79,7 @@ export function BookDetails() {
     reviewService
       .addReview(params.bookId, review)
       .then((book) => {
-        console.log('book: ', book)
-        // setBook(book)
+        // console.log('book: ', book)
         setBook((prevBook) => {
           const reviews = [review, ...prevBook.reviews]
           return { ...prevBook, reviews }
@@ -149,8 +148,8 @@ export function BookDetails() {
         <p>
           <span>Price: </span>
           <span ref={priceRef}>
-            {book.price}
-            {getCurrencySymbol(book.currencyCode)}
+            {book.listPrice.amount}
+            {getCurrencySymbol(book.listPrice.currencyCode)}
           </span>
         </p>
         {book.description && (

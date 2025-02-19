@@ -1,12 +1,9 @@
-import { reviewService } from "../services/review.service.js"
 
-// const {useRef} = React
 
-export function RateBySelect({review, handleChange}) {
-// console.log('reviewToAdd: ',reviewToAdd);
+export function RateBySelect({ rating, handleChange}) {
 
   return (
-    <select value={review} onChange={handleChange} name='rating'>
+    <select value={rating} onChange={handleChange} name='rating'>
     <option value="1">1</option>
     <option value="2">2</option>
     <option value="3">3</option>

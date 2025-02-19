@@ -1,11 +1,10 @@
-
-
-export function RateByTextbox({review, handleChange}){
-
-    return    <input
-    name='rating'
-    value={review}
-    onChange={handleChange}
-    type="number"
-/>
+export function RateByTextbox({ rating, handleChange }) {
+  return (
+    <input
+      name="rating"
+      value={rating || ''}
+      onChange={handleChange}
+      type="number"
+    />
+  )
 }

@@ -33,18 +33,21 @@ function removeReview(bookId, reviewId) {
 function renderRating(rating, updateStar = '') {
   const stars = []
 
-  for (let i = 1; i <= 5; i++) {
+  
+  for (let i = 0; i < 5; i++) {
     const isActive = i < rating ? 'active' : ''
 
     if (typeof updateStar === 'function') {
       stars.push(
         <i
           key={i}
-          onClick={() => updateStar(i)}
+          value={rating || ''}
+          onClick={()=>{updateStar(i + 1)}}
           className={`fa-solid fa-star edit ${isActive}`}
         ></i>
       )
     } else {
+
       stars.push(<i key={i} className={`fa-solid fa-star ${isActive}`}></i>)
     }
   }

@@ -7,7 +7,6 @@ export function BookList({ books, onRemove }) {
   return (
     <section className="books-container">
       {books.map((book) => {
-        // <Link to={`/book/book${book.id}}> Details </Link>
         return (
           <section key={book.id} className="book-container">
             <BookPreview book={book} />
@@ -28,9 +27,3 @@ export function BookList({ books, onRemove }) {
   )
 }
 
-/*
-
-    <button onClick={() => setSelectedBookId(book.id)}>Details</button>
-    <button onClick={() => onDelete(book.id)}>Delete</button>
-
-*/

@@ -134,17 +134,6 @@ function _formatGoogleBooks(googleBooks) {
   })
 }
 
-// function getEmptyBook(
-//   id = '',
-//   title = '',
-//   listPrice = '',
-//   publishedDate = '',
-//   pageCount = '',
-//   currencyCode = '$'
-// ) {
-
-//   return { id, title, listPrice, publishedDate, pageCount, currencyCode }
-// }
 
 function getEmptyBook(
   title = '',
@@ -238,35 +227,6 @@ function _createBooks() {
   saveToStorage(BOOK_KEY, books)
 }
 
-// function _createBooks() {
-//   let books = loadFromStorage(BOOK_KEY)
-//   if (!books || !books.length) {
-//     books = booksData.map((book, idx) => _createBook(book, idx))
-//   }
-//   saveToStorage(BOOK_KEY, books)
-// }
-
-// function _createBook(book, idx) {
-//   // console.log('book: ', book.authors.join(', '))
-//   let newBook = {
-//     id: book.id,
-//     title: book.title,
-//     price: book.listPrice.amount,
-//     authors: book.authors.join(', '),
-//     language: book.language,
-//     description: book.description,
-//     reviews: [],
-//     publishedDate: book.publishedDate,
-//     pageCount: book.pageCount,
-//     isOnSale: book.listPrice.isOnSale,
-//     currencyCode: book.listPrice.currencyCode,
-//     thumbnail: book.thumbnail,
-//     imgSrc: `../assets/img/${idx + 1}.jpg`
-//   }
-//   // console.log('newBook: ',newBook);
-
-//   return newBook
-// }
 
 function _setNextPrevBookId(book) {
   return storageService.query(BOOK_KEY).then((books) => {
@@ -280,41 +240,3 @@ function _setNextPrevBookId(book) {
     return book
   })
 }
-
-/*
-
-function _createBook(bookTitle = 'xxx') {
-  const book = getEmptyBook()
-  book.id = makeId()
-  book.title = bookTitle
-
-  let book = {
-    id: 'OXeMG8wNskc',
-    title: 'metus hendrerit',
-    description: 'placerat nisi sodales suscipit tellus',
-    thumbnail: 'http://ca.org/books-photos/20.jpg',
-    listPrice: {
-      amount: 109,
-      currencyCode: 'EUR',
-      isOnSale: false
-    }
-  }
-
-  return book
-}
-
-{
-"id": "OXeMG8wNskc",
-"title": "metus hendrerit",
-"description": "placerat nisi sodales suscipit tellus",
-"thumbnail": "http://ca.org/books-photos/20.jpg",
-"listPrice": {
-"amount": 109,
-"currencyCode": "EUR",
-"isOnSale": false
-}
-}
-
-
-
-*/

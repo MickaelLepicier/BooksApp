@@ -5,9 +5,8 @@ import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
 const { useState, useEffect } = React
 
-const { useParams, useNavigate, Link, useSearchParams } = ReactRouterDOM
+const { useNavigate, Link, useSearchParams } = ReactRouterDOM
 
-// I can do that the Add Book will be a Modal or Nested Route (Route inside Route)
 export function BookIndex() {
   const [searchParams, setSearchParams] = useSearchParams()
 

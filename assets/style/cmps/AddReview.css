@@ -39,6 +39,27 @@
   margin: 5px;
 }
 
+
+.rating {
+  margin-block: 10px 1em;
+}
+
+
+
+.bold-txt {
+  text-align: center;
+  margin: 1em;
+}
+
+.rate-by-choise input {
+  width: 20px;
+}
+.rate-by-choise input:last-child {
+  width: 50px;
+}
+
+
+
 .stars {
   color: #e6e6e6;
 }
