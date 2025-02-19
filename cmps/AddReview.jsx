@@ -87,6 +87,7 @@ export function AddReview({ onSaveReview, onToggleAddReview }) {
                 cmpType={cmpType}
                 rating={reviewToAdd.rating}
                 handleChange={handleChange}
+                
               />
             </div>
           </div>

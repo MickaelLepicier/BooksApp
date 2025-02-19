@@ -9,6 +9,8 @@
 //     animateCSS
 // }
 
+// todo put LongText.jsx in the Shlof
+
 export function makeId(length = 6) {
   var txt = ''
   var possible =

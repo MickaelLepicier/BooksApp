@@ -6,14 +6,13 @@ export function RateByStars({ rating, handleChange }) {
   const starsRef = useRef()
 
   function updateStar(rate) {
-
     const target = {
       name: 'rating',
       value: rate
     }
 
     updateRating(starsRef, rate)
-    handleChange({target})
+    handleChange({ target })
   }
 
   function updateRating(starsRef, rate) {
@@ -25,9 +24,30 @@ export function RateByStars({ rating, handleChange }) {
     })
   }
 
+  function renderRating(rating, updateStar) {
+    const stars = []
+
+    for (let i = 0; i < 5; i++) {
+      const isActive = i < rating ? 'active' : ''
+
+      stars.push(
+        <i
+          key={i}
+          value={rating || ''}
+          onClick={() => {
+            updateStar(i + 1)
+          }}
+          className={`fa-solid fa-star edit ${isActive}`}
+        ></i>
+      )
+    }
+
+    return stars
+  }
+
   return (
     <section className="stars" ref={starsRef}>
-      {reviewService.renderRating(rating, updateStar)}
+      {renderRating(rating, updateStar)}
     </section>
   )
 }

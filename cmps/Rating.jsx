@@ -18,3 +18,5 @@ export function Rating({ cmpType, rating, handleChange }) {
       break
   }
 }
+
+// Put onChangeCmpType function here and all the label and input
